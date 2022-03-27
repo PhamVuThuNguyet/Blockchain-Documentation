@@ -86,10 +86,6 @@ In simple terms, consensus refers to agreement on some decision by all members o
 - Proof-of-Stake
 - Others
 ### Proof-of-Work (PoW)
-Digital objects like files and text are easy to duplicate. With the click of a button or a few keys, any number of files can be copied from one location to another. This makes digital devices very simple and useful for the average user.
-
-However, costless duplication is not a desirable trait in money. It would not be desirable to have a monetary system which allowed anyone to duplicate their money at will. This is the Double Spend Problem: how can a receiver of digital money be sure that the money they were sent was not simultaneously sent to someone else? How can all members of a monetary network be sure others are not duplicating their money at will?
-
 Proof of work (PoW) is a decentralized consensus mechanism that requires members of a network to expend effort solving an arbitrary mathematical puzzle to prevent anybody from gaming the system.
 
 Proof of work is used widely in cryptocurrency mining, for validating transactions and mining new tokens.
@@ -97,5 +93,11 @@ Proof of work is used widely in cryptocurrency mining, for validating transactio
 Due to proof of work, Bitcoin and other cryptocurrency transactions can be processed peer-to-peer in a secure manner without the need for a trusted third party.
 
 Proof of work at scale requires huge amounts of energy, which only increases as more miners join the network.
+### Proof-of-Stake (PoS)
+With proof-of-stake (POS), cryptocurrency owners validate block transactions based on the number of coins a validator stakes.
 
-Proof of Stake (POS) was one of several novel consensus mechanisms created as an alternative to proof of work.
+Proof-of-stake (POS) was created as an alternative to Proof-of-work (POW), the original consensus mechanism used to validate a blockchain and add new blocks.
+
+Proof-of-stake (POS) is seen as less risky in terms of the potential for an attack on the network, as it structures compensation in a way that makes an attack less advantageous.
+### PoW vs PoS
+Proof of Stake (PoS) uses randomly selected miners to validate transactions. Proof of Work (PoW) uses a competitive validation method to confirm transactions and add new blocks to the blockchain.
