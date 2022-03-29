@@ -15,3 +15,30 @@ Drawbacks include the potential inability to scale, challenges in developing a u
 
 # DAOs
 The DAO was an organization created by developers to automate decisions and facilitate cryptocurrency transactions. It acted as a form of venture capital fund, based on open-source code and without a typical management structure or board of directors. To be fully decentralized, the DAO was unaffiliated with any particular nation-state, though it made use of the ethereum network. 
+# Chaincode
+## What is hyperledger fabric?
+Hyperledger is an enterprise-grade, open-source distributed ledger framework launched by the Linux Foundation in December 2015.
+
+Fabric is a highly-modular, decentralized ledger technology (DLT) platform that was designed by IBM for industrial enterprise use.
+
+The modular architecture of Hyperledger Fabric separates the transaction processing workflow into three different stages: smart contracts called chaincode that comprise the distributed logic processing and agreement of the system, transaction ordering, and transaction validation and commitment.
+This segregation offers multiple benefits:
+- A reduced number of trust levels and verification that keeps the network and processing clutter-free
+- Improved network scalability
+- Better overall performance
+## What is chaincode?
+Chaincode is a program, written in Go, node.js, or Java that implements a prescribed interface. Chaincode runs in a secured Docker container isolated from the endorsing peer process. Chaincode initializes and manages ledger state through transactions submitted by applications.
+
+A chaincode typically handles business logic agreed to by members of the network, so it may be considered as a “smart contract”. State created by a chaincode is scoped exclusively to that chaincode and can’t be accessed directly by another chaincode. However, within the same network, given the appropriate permission a chaincode may invoke another chaincode to access its state.
+
+There are three aspects to chaincode development:
+- Chaincode Interfaces
+- APIs
+- Chaincode Responses
+# Gas (Ethereum)
+## What is gas?
+On the Ethereum blockchain, gas refers to the cost necessary to perform a transaction on the network.
+
+Miners set the price of gas based on supply and demand for the computational power of the network needed to process smart contracts and other transactions.
+
+Priced in small fractions of the cryptocurrency ether (ETH), commonly referred to as gwei and sometimes also called nanoeth, the gas is used to allocate resources of the Ethereum virtual machine (EVM) so that decentralized applications such as smart contracts can self-execute in a secured but decentralized fashion.
