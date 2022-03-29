@@ -63,8 +63,6 @@ In essence, the block chain system or the algorithm will set a target. So there'
 
 Miners want to find the right nonce that gives the good enough hash number.
 # Cryptocurrency Transactions
-## Where do transaction fees come from?
-## How wallets work?
 ## Signatures
 ### Private key
 A private key is a secret number that is used in cryptography and cryptocurrency.

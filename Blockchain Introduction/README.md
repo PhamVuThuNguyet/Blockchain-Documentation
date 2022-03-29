@@ -31,7 +31,7 @@ SHA256-Hash is a string of 64 characters long. It includes numbers 0-9, letters 
 - Must withstand collisions: 64 characters is limited -> may have same hashes for different docs -> must withstand
 # Immutable ledger
 ## What is a ledger?
-Ledger by definition it is a book of record keeping all the financial transactions of the organization.  Today, with innovation, the information stored on computers is moving towards much higher forms which is cryptographically secured, fast and decentralized.
+Ledger by definition it is a book of record keeping all the financial transactions of the organization. Today, with innovation, the information stored on computers is moving towards much higher forms which is cryptographically secured, fast and decentralized.
 ## What is centralized ledger?
 Anything with a financial value is recorded in journals and posted to ledgers. These ledgers are just like the central repository of the posted transactions, and they are the backbone of any organization.
 ## What is decentralized ledger?
