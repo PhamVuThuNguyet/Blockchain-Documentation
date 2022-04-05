@@ -93,3 +93,26 @@ The public key is used to verify the digital signature, which proves ownership o
 A trustless system means that the participants involved do not need to know or trust each other or a third party for the system to function. In a trustless environment, there is no single entity that has authority over the system, and consensus is achieved without participants having to know or trust anything but the system itself.
 
 The property of trustlessness in a peer-to-peer (P2P) network was introduced by Bitcoin, as it allowed all transactional data to be verified and immutably stored on a public blockchain.
+# Types of token
+A cryptographic token is a digital unit of value that lives on the blockchain. There are four main types:
+- Payment tokens:
+Payment tokens are coins. Their main purpose is to serve as a medium of exchange, store of value, and unit of account. Major cryptocurrencies like Bitcoin and Litecoin are payment tokens.
+- Utility tokens:
+These are tokens that give the holder access to a blockchain-based product or service.
+For example, you can use Ether to access dapps or to pay for smart contracts to be executed on the Ethereum blockchain.
+Similarly, Gas coins give you access to the NEO network.
+- Security tokens:
+Security tokens are traditional assets like stocks and shares that have been converted into a digital token on the blockchain.
+Like traditional securities, security tokens give the holder ownership rights. For this reason, a growing number of regulators are controlling how they’re to be issued and traded.
+Most regulators determine whether a token is a security token using some version of the Howey test — a test developed by the US Supreme Court in a case brought by the Securities and Exchange Commission.
+According to this test, a token is a security token if it meets three criteria:
+    - The holder has received the token in exchange for money that has been invested in a common enterprise
+    - They expect to make a profit
+    - They won’t do any of the work required to generate that profit.
+- Non-fungible tokens:
+A non-fungible token is a digital representation of something unique.
+Each token represents a specific asset, so there’s no standard value. This means you can’t exchange one non-fungible token for the other directly.
+# ERC 
+## ERC-20
+## ERC-721
+## ERC-1155
