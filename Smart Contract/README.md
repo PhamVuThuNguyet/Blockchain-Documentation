@@ -47,6 +47,8 @@ The London Upgrade was introduced in an effort to make Ethereum’s fees more pr
 
 As of this upgrade, each block has a base fee, which is calculated by the network based on current demand for block space. This base fee gets burnt (destroyed), so users are now expected to include a tip or priority fee with each transaction — the higher the tip, the hope is, the more the transaction will be prioritized. This tip provides compensation to miners and the expectation is that most crypto wallets will integrate a feature that sets the tip fee automatically.
 
+Calculating the total transaction fee works as follows: Gas units (limit) * (Base fee + Tip)
+
 After the London Upgrade, Gas works like this:
 
 1.    Assume Alice wants to send Bob 1 ETH. The Gas limit is 21,000 units, the base fee is 100 gwei, and Alice includes a tip of 10 gwei.
