@@ -43,3 +43,16 @@ Miners set the price of gas based on supply and demand for the computational pow
 
 Priced in small fractions of the cryptocurrency ether (ETH), commonly referred to as gwei and sometimes also called nanoeth, the gas is used to allocate resources of the Ethereum virtual machine (EVM) so that decentralized applications such as smart contracts can self-execute in a secured but decentralized fashion.
 ## How does gas work?
+The London Upgrade was introduced in an effort to make Ethereum’s fees more predictable for users. It also introduced a burn mechanism into Ethereum, which is intended to offset the issuance of new ETH (there is no limit to how many ETH can be minted).
+
+As of this upgrade, each block has a base fee, which is calculated by the network based on current demand for block space. This base fee gets burnt (destroyed), so users are now expected to include a tip or priority fee with each transaction — the higher the tip, the hope is, the more the transaction will be prioritized. This tip provides compensation to miners and the expectation is that most crypto wallets will integrate a feature that sets the tip fee automatically.
+
+After the London Upgrade, Gas works like this:
+
+1.    Assume Alice wants to send Bob 1 ETH. The Gas limit is 21,000 units, the base fee is 100 gwei, and Alice includes a tip of 10 gwei.
+
+2.    The new formula is: Gas units (limit) x (Base fee + Tip). This can be calculated as 21,000 x (100 + 10) = 2,310,000 gwei or 0.00231 ETH.
+
+3.    When Alice sends the ETH, 1.00231 ETH will be subtracted from her wallet. Bob will receive 1.0000 ETH. A miner will receive the tip of 0.00021 ETH. 0.0021 ETH will be burned.
+
+Alice also has the ability to set a max fee for the transaction. The difference between the max fee and actual fee will be refunded. This allows users to set a maximum amount to pay for transactions without having to worry about overpaying. This makes things more predictable, as under the old transaction fee model, fees could wind up being higher than anticipated during times of extreme network congestion.
