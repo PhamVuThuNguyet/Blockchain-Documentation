@@ -42,3 +42,4 @@ On the Ethereum blockchain, gas refers to the cost necessary to perform a transa
 Miners set the price of gas based on supply and demand for the computational power of the network needed to process smart contracts and other transactions.
 
 Priced in small fractions of the cryptocurrency ether (ETH), commonly referred to as gwei and sometimes also called nanoeth, the gas is used to allocate resources of the Ethereum virtual machine (EVM) so that decentralized applications such as smart contracts can self-execute in a secured but decentralized fashion.
+## How does gas work?

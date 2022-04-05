@@ -101,3 +101,27 @@ Proof-of-stake (POS) was created as an alternative to Proof-of-work (POW), the o
 Proof-of-stake (POS) is seen as less risky in terms of the potential for an attack on the network, as it structures compensation in a way that makes an attack less advantageous.
 ### PoW vs PoS
 Proof of Stake (PoS) uses randomly selected miners to validate transactions. Proof of Work (PoW) uses a competitive validation method to confirm transactions and add new blocks to the blockchain.
+# Types of blockchain
+## Permissionless vs permissioned blockchains
+All types of blockchains can be characterized as permissionless, permissioned, or both.  Permissionless blockchains allow any user to pseudo-anonymously join the blockchain network (that is, to become “nodes” of the network) and do not restrict the rights of the nodes on the blockchain network.
+
+Conversely, permissioned blockchains restrict access to the network to certain nodes and may also restrict the rights of those nodes on that network.  The identities of the users of a permissioned blockchain are known to the other users of that permissioned blockchain.
+
+Permissionless blockchains tend to be more secure than permissioned blockchains, because there are many nodes to validate transactions, and it would be difficult for bad actors to collude on the network.  However, permissionless blockchains also tend to have long transaction processing times due to the large number of nodes and the large size of the transactions. 
+
+On the other hand, permissioned blockchains tend to be more efficient.  Because access to the network is restricted, there are fewer nodes on the blockchain, resulting in less processing time per transaction. 
+
+![alt](./imgs/Permissionless%20vs%20permissioned.png "Permissionless vs Permissioned Blockchains")
+
+There are four types of blockchain structures:
+- Public blockchain
+- Private blockchain
+- Consorium blockchain
+- Hybrid blockchain
+## Public blockchain
+Public blockchains are permissionless in nature, allow anyone to join, and are completely decentralized.  Public blockchains allow all nodes of the blockchain to have equal rights to access the blockchain, create new blocks of data, and validate blocks of data. 
+
+To date, public blockchains are primarily used for exchanging and mining cryptocurrency.
+## Private blockchain (Managed blockchain)
+Private blockchains, which may also be referred to as managed blockchains, are permissioned blockchains controlled by a single organization. In a private blockchain, the central authority determines who can be a node.  The central authority also does not necessarily grant each node with equal rights to perform functions.  Private blockchains are only partially decentralized because public access to these blockchains is restricted. 
+## Public blockchain vs private blockchain
