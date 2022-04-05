@@ -125,3 +125,18 @@ To date, public blockchains are primarily used for exchanging and mining cryptoc
 ## Private blockchain (Managed blockchain)
 Private blockchains, which may also be referred to as managed blockchains, are permissioned blockchains controlled by a single organization. In a private blockchain, the central authority determines who can be a node.  The central authority also does not necessarily grant each node with equal rights to perform functions.  Private blockchains are only partially decentralized because public access to these blockchains is restricted. 
 ## Public blockchain vs private blockchain
+|Basis of Comparision|Public Blockchain|Private Blockchain|
+|-----|----|----|
+|<b>Access|In this type of blockchain anyone can read, write and participate in a blockchain. Hence, it is permssionless blockchain. It is public to everyone|In this type of blockchain read and write is done upon invitation, hence it is a permissioned blockchain|
+|<b>Network Actors|Don’t know each other|Know each other|
+|<b>Type of Network|A public blockchain is decentralized|A private blockchain is more centralized|
+|<b>Order of magnitude|The order of magnitude of a public blockchain is lesser than that of a private blockchain as it is lighter and provides transactional throughput|The order of magnitude is more as compared to the public blockchain|
+|<b>Native Token|Yes|Not necessary|
+|<b>Speed|Slow|Fast|
+|<b>Transactions per Second|Transactions per second are lesser in a public blockchain|Transaction per second is more as compared to public blockchain|
+|<b>Security|A public network is more secure due to decentralization and active participation. Due to the higher number of nodes in the network, it is nearly impossible for ‘bad actors’ to attack the system and gain control over the consensus networ|A private blockchain is more prone to hacks, risks, and data breaches/ manipulation. It is easy for bad actors to endanger the entire network. Hence, it is less secure|
+|<b>Energy Consumption|A public blockchain consumes more energy than a private blockchain as it requires a significant amount of electrical resources to function and achieve network consensus|Private blockchains consume a lot less energy and power|
+|<b>Consensus Algorithms|Some are proof of work, proof of stake, proof of burn, proof of space, etc.|Proof of Elapsed Time (PoET), Raft, and Istanbul BFT can be used only in case of private blockchains|
+|<b>Attack|In a public blockchain, no one knows who each validator is and this increases the risk of potential collision or a 51% attack (a group of miners which control more than 50% of the network’s computing power.)|In a private blockchain, there is no chance of minor collision. Each validator is known and they have the suitable credentials to be a part of the network|
+|<b>Effects|Potential to disrupt current business models through disintermediation. There is lower infrastructure cost. No need to maintain servers or system admins radically. Hence reducing the cost of creating and running decentralized application (dApps)|Reduces transaction cost and data redundancies and replace legacy systems, simplifying documents handling and getting rid of semi manual compliance mechanisms|
+|<b>Examples|Bitcoin, Ethereum, Monero, Zcash, Dash, Litecoin, Stellar, Steemit, etc.|R3 (Banks), EWF (Energy), B3i (Insurance), Corda|
