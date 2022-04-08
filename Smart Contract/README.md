@@ -58,3 +58,23 @@ After the London Upgrade, Gas works like this:
 3.    When Alice sends the ETH, 1.00231 ETH will be subtracted from her wallet. Bob will receive 1.0000 ETH. A miner will receive the tip of 0.00021 ETH. 0.0021 ETH will be burned.
 
 Alice also has the ability to set a max fee for the transaction. The difference between the max fee and actual fee will be refunded. This allows users to set a maximum amount to pay for transactions without having to worry about overpaying. This makes things more predictable, as under the old transaction fee model, fees could wind up being higher than anticipated during times of extreme network congestion.
+# Fork in blockchain
+## Soft fork
+A soft fork is a change to the software protocol where only previously valid transaction blocks are made invalid. Because old nodes will recognize the new blocks as valid, a soft fork is backwards-compatible. This kind of fork requires only a majority of the miners upgrading to enforce the new rules, as opposed to a hard fork that requires all nodes to upgrade and agree on the new version.
+
+New transaction types can often be added as soft forks, requiring only that the participants (e.g. sender and receiver) and miners understand the new transaction type. This is done by having the new transaction appear to older clients as a "pay-to-anybody" transaction (of a special form) and getting the miners to agree to reject blocks including these transactions unless the transaction validates under the new rules.
+A soft fork can also occur at times due to a temporary divergence in the blockchain when miners using non-upgraded nodes violate a new consensus rule their nodes don’t know about. 
+
+Soft forks don't require any nodes to upgrade to maintain consensus, since all blocks with the new soft forked-in rules also follow the old rules, therefore old clients accept them. Soft forks cannot be reversed without a hard fork since a soft fork by definition only allows the set of valid blocks to be a proper subset of what was valid pre-fork. If users upgrade to a post-soft fork client and for some reason a majority of miners switch back to the pre-soft fork client, the post-soft fork client users would break consensus as soon as a block came along that didn't follow their clients' new rules. In order for a soft fork to work, a majority of the mining power needs to be running a client recognizing the fork. The more miners that accept the new rules, the more secure the network is post-fork. If you have 3/4 of miners recognizing the fork, 1/4 blocks created aren't guaranteed to follow the new rules. These 1/4 blocks will be valid to old nodes that aren't aware of the new rules, but they will be ignored by new nodes.
+
+![alt](../Blockchain%20Introduction/imgs/soft%20fork.png "Soft fork")
+## Hard fork
+A hard fork refers to a radical change to the protocol of a blockchain network that effectively results in two branches, one that follows the previous protocol and one that follows the new version.
+
+In a hard fork, holders of tokens in the original blockchain will be granted tokens in the new fork as well, but miners must choose which blockchain to continue verifying.
+
+A hard fork can occur in any blockchain, and not only Bitcoin (where hard forks have created Bitcoin Cash and Bitcoin SV, among several others, for example).
+
+A hard fork is when nodes of the newest version of a blockchain no longer accept the older version(s) of the blockchain; which creates a permanent divergence from the previous version of the blockchain.
+
+Adding a new rule to the code essentially creates a fork in the blockchain: one path follows the new, upgraded blockchain, and the other path continues along the old path. Generally, after a short time, those on the old chain will realize that their version of the blockchain is outdated or irrelevant and quickly upgrade to the latest version.
