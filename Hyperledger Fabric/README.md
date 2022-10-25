@@ -68,8 +68,28 @@ After a smart contract has been committed, client applications can be used to in
 # Key Concepts
 ## Fabric Chaincode Lifecycle
 ### What is chaincode?
+Chaincode is a program, written in Go, Node.js, or Java that implements a prescribed interface. Chaincode runs in a secured Docker container isolated from the endorsing peer process. Chaincode initializes and manages ledger state through transactions submitted by applications.
+
+Ledger updates created by a chaincode are scoped exclusively to that chaincode and can’t be accessed directly by another chaincode. However, within the same network, given the appropriate permission a chaincode may invoke another chaincode to access its state.
+
+### Chaincode Lifecycle
+The Fabric chaincode lifecycle is a process that allows multiple organizations to agree on how a chaincode will be operated before it can be used on a channel.
+
+#### Install and define a chaincode
+Fabric chaincode lifecycle requires that organizations agree to the parameters that define a chaincode, such as name, version, and the chaincode endorsement policy. Channel members come to agreement using the following four steps. Not every organization on a channel needs to complete each step.
+1. Package the chaincode: Chaincode cần được đóng gói thành file tar trước khi cài đặt lên peer. Khi đóng gói chaincode, cần tạo package label để người khác có thể đọc hiểu về mô tả của chaincode.
+2. Install the chaincode on peers
+3. Approve a chaincode definition for organization
+4. Commit the chaincode definition to the channel
 
 # Working with Hyperledger Fabric
+## Install Fabric
+- ```curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh && chmod +x install-fabric.sh``` (lấy install scripts)
+
+- ```./install-fabric.sh docker samples``` (install fabric images & clone fabric samples)
+
+- ```curl https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/bootstrap.sh``` (get bootstrap scripts to install binaries)
+
 ## Using the test network
 - ```./network.sh up```
 - ```./network.sh down```
