@@ -67,7 +67,7 @@ A soft fork can also occur at times due to a temporary divergence in the blockch
 
 Soft forks don't require any nodes to upgrade to maintain consensus, since all blocks with the new soft forked-in rules also follow the old rules, therefore old clients accept them. Soft forks cannot be reversed without a hard fork since a soft fork by definition only allows the set of valid blocks to be a proper subset of what was valid pre-fork. If users upgrade to a post-soft fork client and for some reason a majority of miners switch back to the pre-soft fork client, the post-soft fork client users would break consensus as soon as a block came along that didn't follow their clients' new rules. In order for a soft fork to work, a majority of the mining power needs to be running a client recognizing the fork. The more miners that accept the new rules, the more secure the network is post-fork. If you have 3/4 of miners recognizing the fork, 1/4 blocks created aren't guaranteed to follow the new rules. These 1/4 blocks will be valid to old nodes that aren't aware of the new rules, but they will be ignored by new nodes.
 
-![alt](../Blockchain%20Introduction/imgs/soft%20fork.png "Soft fork")
+![alt](../imgs/soft%20fork.png "Soft fork")
 ## Hard fork
 A hard fork refers to a radical change to the protocol of a blockchain network that effectively results in two branches, one that follows the previous protocol and one that follows the new version.
 
