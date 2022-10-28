@@ -175,6 +175,27 @@ An organization can approve a chaincode definition without installing the chainc
 
 After the chaincode definition has been committed to the channel, the chaincode container will launch on all of the peers where the chaincode has been installed, allowing channel members to start using the chaincode.
 
+#### Upgrade Chaincode
+Nếu upgrade binaries thì thực hiện các bước như lần đầu install chaincode.
+
+#### Deployment Scenarios
+
+<b>1. Joining a channel</b>
+A new organization can join a channel with a chaincode already defined, and start using the chaincode after installing the chaincode package and approving the chaincode definition that has already been committed to the channel.
+
+After approving the chaincode definition, the new organization can start using the chaincode after the package has been installed on their peers. The definition does not need to be committed again. If the endorsement policy is set the default policy that requires endorsements from a majority of channel members, then the endorsement policy will be updated automatically to include the new organization.
+
+<b>2. Updating an endorsement policy</b>
+You can use the chaincode definition to update an endorsement policy without having to repackage or re-install the chaincode. Channel members can approve a chaincode definition with a new endorsement policy and commit it to the channel. They increment the definition sequence from one to two, but do not need to update the chaincode version.
+
+<b>3. One organization disagrees on the chaincode definition</b>
+An organization that does not approve a chaincode definition that has been committed to the channel cannot use the chaincode. Organizations that have either not approved a chaincode definition, or approved a different chaincode definition will not be able to execute the chaincode on their peers.
+
+An organization can approve a new chaincode definition with any sequence number or version. This allows you to approve the definition that has been committed to the channel and start using the chaincode.
+
+<b>4. Creating multiple chaincodes using one package</b>
+You can use one chaincode package to create multiple chaincode instances on a channel by approving and committing multiple chaincode definitions. Each definition needs to specify a different chaincode name. This allows you to run multiple instances of a smart contract on a channel, but have the contract be subject to different endorsement policies.
+
 # Working with Hyperledger Fabric
 
 ## Install Fabric
