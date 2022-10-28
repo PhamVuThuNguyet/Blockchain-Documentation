@@ -235,3 +235,115 @@ You can use one chaincode package to create multiple chaincode instances on a ch
 
 - `peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C channelname -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"TransferAsset","Args":["asset6","Christopher"]}'` (change the owner of an asset on the ledger by invoking the asset-transfer (basic) chaincode.
   Because the endorsement policy for the asset-transfer (basic) chaincode requires the transaction to be signed by Org1 and Org2, the chaincode invoke command needs to target both peer0.org1.example.com and peer0.org2.example.com using the --peerAddresses flag. Because TLS is enabled for the network, the command also needs to reference the TLS certificate for each peer using the --tlsRootCertFiles flag.)
+
+  ## Setup Logspout (Optional)
+
+  This step is not required but is extremely useful for troubleshooting chaincode. To monitor the logs of the smart contract, an administrator can view the aggregated output from a set of Docker containers using the logspout tool.
+
+  - `cd fabric-samples/test-network`
+  - `./monitordocker.sh fabric_test` (fabric_test is network's name)
+
+  When you are finished using the chaincode, you can also use the following commands to remove the Logspout tool.
+  <code>docker stop logspout
+  docker rm logspout</code>
+
+  ## Deploy a Smart Contract to a Channel
+
+  ### Package the Smart Contract
+
+  We need to package the chaincode before it can be installed on our peers.
+
+  - Before we package the chaincode, we need to install the chaincode dependencies. Navigate to the folder that contains the JavaScript version of the asset-transfer (basic) chaincode.
+    `cd fabric-samples/asset-transfer-basic/chaincode-javascript`
+
+  - To install the smart contract dependencies, run the following command from the asset-transfer-basic/chaincode-javascript directory.
+    ``npm install`
+
+  - Now that we that have our dependencies, we can create the chaincode package. Navigate back to our working directory in the test-network folder so that we can package the chaincode together with our other network artifacts.
+    `cd ../../test-network`
+
+  - You can use the peer CLI to create a chaincode package in the required format. The peer binaries are located in the bin folder of the fabric-samples repository. Use the following command to add those binaries to your CLI Path
+    `export PATH=${PWD}/../bin:$PATH`
+
+  - Set the FABRIC_CFG_PATH to point to the core.yaml file in the fabric-samples repository
+    `export FABRIC_CFG_PATH=$PWD/../config/`
+
+  - Check the version of the binaries
+    `peer version`
+
+  - Create the chaincode package using the peer lifecycle chaincode package command:
+    `peer lifecycle chaincode package basic.tar.gz --path ../asset-transfer-basic/chaincode-javascript/ --lang node --label basic_1.0`
+    This command will create a package named basic.tar.gz in your current directory. The --lang flag is used to specify the chaincode language and the --path flag provides the location of your smart contract code. The --label flag is used to specify a chaincode label that will identify your chaincode after it is installed. It is recommended that your label include the chaincode name and version.
+
+### Install the Chaincode Package
+
+The chaincode needs to be installed on every peer that will endorse a transaction.
+
+- Set the following environment variables to operate the peer CLI as the Org1 admin user.
+  <code>export CORE_PEER_TLS_ENABLED=true
+  export CORE_PEER_LOCALMSPID="Org1MSP"
+  export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+  export CORE_PEER_ADDRESS=localhost:7051</code>
+
+- Install chaincode on peer Org1
+  `peer lifecycle chaincode install basic.tar.gz`
+
+- Set the following environment variables to operate as the Org2 admin and target the Org2 peer
+  <code>export CORE_PEER_LOCALMSPID="Org2MSP"
+  export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+  export CORE_PEER_ADDRESS=localhost:9051</code>
+
+- Install như cũ
+
+The chaincode is built by the peer when the chaincode is installed.
+
+### Approve a Chaincode Definition
+
+After you install the chaincode package, you need to approve a chaincode definition for your organization. The definition includes the important parameters of chaincode governance such as the name, version, and the chaincode endorsement policy.
+
+If an organization has installed the chaincode on their peer, they need to include the packageID in the chaincode definition approved by their organization. The package ID is used to associate the chaincode installed on a peer with an approved chaincode definition, and allows an organization to use the chaincode to endorse transactions.
+
+- Find packageID
+  `peer lifecycle chaincode queryinstalled`
+
+- Save it as an environment variable
+  `export CC_PACKAGE_ID={previous_gen_package_id}`
+
+- Chaincode is approved at the organization level, so the command only needs to target one peer.
+  `peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --channelID channelname --name basic --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1 --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"`
+  You need to approve a chaincode definition with an identity that has an admin role. As a result, the CORE_PEER_MSPCONFIGPATH variable needs to point to the MSP folder that contains an admin identity.
+
+- Operate as Org1 admin
+  <code>export CORE_PEER_LOCALMSPID="Org1MSP"
+  export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+  export CORE_PEER_ADDRESS=localhost:7051</code>
+
+- `peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --channelID channelname --name basic --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1 --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"`
+
+If you commit the definition before a channel member has approved the chaincode, the organization will not be able to endorse transactions. As a result, it is recommended that all channel members approve a chaincode before committing the chaincode definition.
+
+### Committing the Chaincode Definition to the Channel
+
+- Check whether channel members have approved the same chaincode definition
+  `peer lifecycle chaincode checkcommitreadiness --channelID channelname --name basic --version 1.0 --sequence 1 --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --output json`
+
+- Commit the chaincode definition to the channel
+  `peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --channelID channelname --name basic --version 1.0 --sequence 1 --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt"`
+
+The command needs to target the peers from a sufficient number of organizations to satisfy the policy for deploying a chaincode. Because the approval is distributed within each organization, you can target any peer that belongs to a channel member by flag --peerAddress.
+
+- Confirm that the chaincode definition has been committed to the channel.
+  `peer lifecycle chaincode querycommitted --channelID channelname --name basic --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"`
+
+## Invoking the Chaincode
+
+After the chaincode definition has been committed to a channel, the chaincode will start on the peers joined to the channel where the chaincode was installed.
+
+Note that the invoke command needs to target a sufficient number of peers to meet the chaincode endorsement policy. The CLI does not access the Fabric Gateway peer, so each endorsing peer must be specified.
+
+`peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C channelname -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'`
+
+Query: `peer chaincode query -C channelname -n basic -c '{"Args":["GetAllAssets"]}'`
