@@ -197,6 +197,8 @@ An organization can approve a new chaincode definition with any sequence number 
 <b>4. Creating multiple chaincodes using one package</b>
 You can use one chaincode package to create multiple chaincode instances on a channel by approving and committing multiple chaincode definitions. Each definition needs to specify a different chaincode name. This allows you to run multiple instances of a smart contract on a channel, but have the contract be subject to different endorsement policies.
 
+## Membership Service Provider (MSP)
+
 # Working with Hyperledger Fabric
 
 ## Install Fabric
@@ -347,3 +349,43 @@ Note that the invoke command needs to target a sufficient number of peers to mee
 `peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C channelname -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'`
 
 Query: `peer chaincode query -C channelname -n basic -c '{"Args":["GetAllAssets"]}'`
+
+## Running a Fabric Application
+
+### Sample Applications
+
+- First start the network and create channel using certificate authorities (-ca flag)
+  `./network.sh up createChannel -c mychannel -ca`
+- Cd to chaincode and install dependencies (chaincode and application must be written in same language)
+- Deploy chaincode
+- Cd to application
+  `cd asset-transfer-basic/application-gateway-typescript`
+- Install dependencies:
+  `npm install`
+  This process installs the application dependencies defined in the application’s package.json. The most important of which is the @hyperledger/fabric-gateway Node.js package; this provides the Fabric Gateway client API used to connect a Fabric Gateway and, using a specific client identity, to submit and evaluate transactions, and receive events.
+
+- Run the application:
+  `npm start`
+  When we started the Fabric network, several identities were created using the Certificate Authorities. These include a user identity for each of the organizations. The application will use the credentials of one of these user identities to transact with the blockchain network.
+
+### Examine the application code:
+
+- Open the asset-transfer-basic/application-gateway-typescript/src/app.ts file and examine the code.
+
+1. First, we want to establish a gRPC connection to the gateway service that will be used to transact with the network. To do this, it only requires the Fabric Gateway’s endpoint address and, if it is configured to use TLS, appropriate TLS certificates.
+   In order to maintain security of any private data used in transactions, the application should connect to a Fabric Gateway belonging to the same organization as the client identity.
+
+2. The client application then creates a Gateway connection, which it uses to access any of the Networks (analogous to channels) accessible to the Fabric Gateway, and subsequently smart Contracts deployed to those networks.
+   A Gateway connection has three requirements:
+
+- gRPC connection to the Fabric Gateway.
+- Client identity used to transact with the network.
+- Signing implementation used to generate digital signatures for the client identity.
+
+3.  After connected, we can access the smart contract to be invoked. The sample application uses the Gateway connection to get a reference to the Network and then the default Contract within a chaincode deployed on that network.
+    ` const network = gateway.getNetwork(channelName);`
+    ` const contract = network.getContract(chaincodeName);`
+
+    
+    When a chaincode package includes multiple smart contracts, you can provide both the name of the chaincode and the name of a specific smart contract as arguments to the getContract() call. For example:
+    ```const contract = network.getContract(chaincodeName, smartContractName);```
