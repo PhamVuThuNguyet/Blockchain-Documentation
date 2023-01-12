@@ -92,3 +92,44 @@ Algorithm BLAKE2b
    Result ← first cbHashLen bytes of little endian state vector h
 End Algorithm BLAKE2b
 ```
+
+### Keypairs and signing
+Như đã biết, Bitcoin thực thi quyền sở hữu bằng một thuật toán gọi là Chữ ký kỹ thuật số đường cong Elliptic (Elliptic Curve Digital Signature Algorithm, gọi tắt là ECDSA). Thuật toán này cho phép chúng ta lấy một số (tức khóa riêng tư) và tạo ra một khóa công khai từ đó.
+
+Polkadot sử dụng thuật toán tương tự thay thế cho ECDSA là Schnorrkel/Ristretto x25519 (SR25519) để sinh khoá.
+
+SR25519 là thuật toán dựa trên Curve25519, một dạng đường cong Elliptic.
+
+Đường cong Elliptic được ứng dụng nhiều trong mật mã học. Về cơ bản, đường cong elliptic có dạng tổng quát phương trình Weierstrass như sau:
+
+$$
+y^2 + a_1xy + a_3xy = x^3 + a_2x^2 + a_4x + a_6
+$$
+
+Sau 1 số phép thế và phép biến đổi thì phương trình rút gọn chỉ còn:
+
+$$
+y^2 = x^3 + Ax + B
+$$
+
+Với điều kiện:
+
+$$
+4A^3 + 27B^2 \neq 0
+$$
+
+Đây cũng là dạng chủ yếu xuất hiện trong các tài liệu.
+
+Mật mã đường cong Elliptic (ECC) sử dụng các tính chất toán học của đường cong Elliptic để tạo ra các hệ thống mật mã khóa công khai (khóa mà bạn sử dụng để mã hóa dữ liệu của mình có thể được công khai trong khi khóa được sử dụng để giải mã dữ liệu của bạn có thể được giữ kín). Giống như tất cả các mật mã khóa công khai, ECC dựa trên các hàm toán học đơn giản để tính toán theo một hướng, nhưng rất khó để đảo ngược. Độ an toàn của ECC dựa vào bài toán logarit rời rạc trên nhóm các điểm của đường cong Elliptic.
+
+Đường cong Elliptic Curve25519 được thiết kế để sử dụng với giao thức Elliptic-curve Diffie-Hellman (ECDH). Cụ thể, phương trình đường cong được viết dưới dạng: 
+
+$$
+y^2 = x^3 + 486662x^2 + x
+$$
+
+Đây là một Montgomery curve, đồ thị có dạng sau: 
+
+![Montgomery curve](../imgs/Montgomery%20curve.png)
+
+Như đã nói ở trên, Polkadot không dùng thuật toán ECDSA mà sử dụng thuật toán chữ ký Schnorr. Loại chữ ký này sở hữu một đặc tính mạnh mẽ là <b>độ tuyến tính</b>. Dễ hiểu hơn, điều này làm cho loại chữ ký này này đặc biệt phù hợp với các giao dịch đa chữ ký. (Tham khảo thêm ở <a href="https://en.wikipedia.org/wiki/Schnorr_signature">đây</a>)
