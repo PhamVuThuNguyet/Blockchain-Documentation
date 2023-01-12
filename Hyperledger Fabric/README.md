@@ -199,6 +199,9 @@ You can use one chaincode package to create multiple chaincode instances on a ch
 
 ## Membership Service Provider (MSP)
 
+## Endorsement Policy
+Every chaincode has an endorsement policy which specifies the set of peers on a channel that must execute chaincode and endorse the execution results in order for the transaction to be considered valid. 
+
 # Working with Hyperledger Fabric
 
 ## Install Fabric
@@ -389,3 +392,6 @@ Query: `peer chaincode query -C channelname -n basic -c '{"Args":["GetAllAssets"
     
     When a chaincode package includes multiple smart contracts, you can provide both the name of the chaincode and the name of a specific smart contract as arguments to the getContract() call. For example:
     ```const contract = network.getContract(chaincodeName, smartContractName);```
+
+## Using CouchDB
+### 1. Enable CouchDB in HF
