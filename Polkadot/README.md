@@ -31,6 +31,11 @@ Có 3 loại:
     - Soft derivation cho phép người dùng "truy ngược" để tìm ra private key của account gốc nếu họ biết private key của account phái sinh. Ngoài ra, soft derivation thể hiện được sự liên kết giữa các accounts cùng seed. Nói cách khác, soft derivation cho phép proof-of-parent.
     - Hard derivation không cho phép điều đó
 
+
+## Advanced Staking Concepts
+### Staking proxies
+Polkadot cho phép tạo ra các account có chức năng đặc biệt, gọi là <b>proxy account</b>
+
 ## Cryptography on Polkadot
 ### Hashing algorithm
 Polkadot sử dụng thuật toán Blake2b.
@@ -133,3 +138,9 @@ $$
 ![Montgomery curve](../imgs/Montgomery%20curve.png)
 
 Như đã nói ở trên, Polkadot không dùng thuật toán ECDSA mà sử dụng thuật toán chữ ký Schnorr. Loại chữ ký này sở hữu một đặc tính mạnh mẽ là <b>độ tuyến tính</b>. Dễ hiểu hơn, điều này làm cho loại chữ ký này này đặc biệt phù hợp với các giao dịch đa chữ ký. (Tham khảo thêm ở <a href="https://en.wikipedia.org/wiki/Schnorr_signature">đây</a>)
+
+### Keys
+Key trong Polkadot được chia làm 3 loại
+- Account Keys
+- "Controller" & "Stash" Keys
+- Session Keys
