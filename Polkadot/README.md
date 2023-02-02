@@ -19,20 +19,53 @@ Ngược lại, PoS hoạt động bằng cách chọn ngẫu nhiên validator d
 
 ### Nhược điểm
 
-- Khi ủy quyền hoặc làm validator, thì người dùng sẽ được thêm số lượng coin, nhưng sẽ bị giam vốn, hoặc đôi khi bị mất giá coin và số lượng bù vào cũng không đủ hòa vốn.
+- Khi đã trở thành validator, người dùng sẽ được nhận thưởng từ việc xác thực, nhưng bị giảm vốn. Đôi khi sẽ bị thâm hụt mất phần đã stake ban đầu.
 - Sẽ có trường hợp unlock cần phải đợi một khoảng thời gian. Điều này sẽ làm người dùng bị động khi giá token điều chỉnh. Ví dụ như LUNA unstake trên Terra Station tốn 15 ngày.
 - Việc khóa (stake) token này liên quan đến quản trị. Điều này dẫn đến trường hợp blockchain mang tính tập trung: Một số ít người nắm nhiều token, quyền hạn quá lớn, gây ra sự domination trong các quyết định.
 - Tính bảo mật kém vì ai cũng có thể trở thành validator chỉ bằng cách sở hữu lượng lớn token, khiến mạng dễ bị tấn công 51%. Ngoài ra, những validators này cũng có cơ hội lạm dụng quyền lực của mình.
 
 ## Nominated Proof of Stake (NPoS)
 
+Để giải quyết những nhược điểm của PoS, NPoS ra đời.
+NPoS là nơi mà các stakeholder có quyền chọn những validator cụ thể để tham gia vào cơ chế đồng thuận. Trong NPoS, có 2 role là <b>validators</b> và <b>nominators</b>. Trong NPoS, người dùng được khuyến khích tham gia vào việc bảo vệ mạng lưới bằng cách staking token và biểu quyết để bầu chọn validator có lịch sử hoạt động tốt. Chỉ các nút đã được đề cử mới được phép xác nhận các khối mới và kiếm phần thưởng.
+
+![Nominated Proof of Stake](../imgs/NPoS.png)
+
+<h4>CÁCH HOẠT ĐỘNG CỦA NPoS</h4>
+Định kỳ vài lần trong ngày, hệ thống sẽ chọn ra một nhóm các node được gọi là các validator. Chúng sẽ đóng vai trò quan trọng trong các giao thức như sản xuất khối (block production) và finality gadget của phiên kế tiếp.
+
+- Nhóm validator sẽ phải stake token theo dạng thế chấp, cam kết hoàn thành đúng nhiệm vụ. Bất kì hành động nào gây tổn hại đến giao thức, số token được stake sẽ bị cắt đi một phần. Ngược lại, nếu hoàn thành tốt, họ sẽ được thưởng. Tất cả các validator đều có trọng số như nhau (quyền biểu quyết như nhau) trong quá trình xác thực.
+
+- Các nominator cũng sẽ khóa token chung với validator mà họ bầu chọn và nhận thưởng theo tỉ lệ token họ đóng góp. Ngược lại khi validator của họ không hoàn thành đúng nhiệm vụ hoặc gây tổn hại đến giao thức, họ cũng sẽ bị cắt một phần token trong pool. Staked token của nominator được phân phối cho những validators được bầu chọn sao cho càng đồng đều càng tốt.
+
+![NPoS architecture](../imgs/NPoS%202.png)
+
+Cơ chế này khiến cho các bên có ý đồ xấu rất khó để có được sự bầu chọn từ nominator (vì cần phải xây dựng một lượng lớn danh tiếng để có được sự ủng hộ) và sẽ rất tốn kém để tấn công hệ thống (bởi cuộc tấn công nào cũng sẽ dẫn đến việc cắt giảm một lượng lớn DOT).
+
+NPoS cho phép hầu như tất cả các chủ sở hữu DOT tham gia một cách liên tục. Chính vì vậy sẽ duy trì được mức độ bảo mật cao bằng cách có những stake giá trị hơn và cho phép nhiều người kiếm được lợi nhuận dựa trên số vốn nắm giữ.
+
+Polkadot sử dụng các công cụ từ lý thuyết bầu cử (election theory) đến lý thuyết trò chơi (game theory) để tối ưu hóa rời rạc, nhằm phát triển một quy trình bầu chọn hiệu quả mang lại sự đại diện và bảo mật công bằng.
+
+## NPoS Election algorithms
+Như đã nói ở trên, các validator có quyền gần như bằng nhau, nên điều quan trọng là phải đảm bảo số lượng staked token của mỗi validator được phân bố đồng đều. Polkadot sử dụng một thuật toán bầu cử (election algorithm) để tối ưu hoá 3 tham số khi tính toán solution graph của nominators và validators:
+- Maximize tổng số token at stake (số token sẽ mất nếu validate sai)
+- Maximize staked token của validator đang có stake thấp nhất
+- Minimize phương sai (variance) của stake trong set
+
+Sequential Phragmén, Phragmms, và Star balancing là một số thuật toán đáng chú ý mà Polkadot sử dụng.
+
+### Sequential Phragmén
+Vào cuối thế kỷ 19, nhà toán học Thụy Điển Lars Edvard Phragmén đã đề xuất một phương pháp để bầu các thành viên vào quốc hội trong nước. Ông nhận thấy rằng những phương pháp bầu cử thời điểm đó có xu hướng nhường tất cả các ghế cho chính đảng phổ biến nhất.
+
+Ngược lại, phương pháp mới của ông đảm bảo rằng số ghế được ấn định cho mỗi đảng tỷ lệ thuận với số phiếu được trao cho họ, vì vậy nó giúp mang lại nhiều sự đại diện hơn cho bên thiểu số.
+
+#### Basic Phragmén
+
 ## BABE
 
 ## GRANDPA
 
 ## Hybrid consensus
-
-## NPoS Election algorithms
 
 ## Randomness
 
