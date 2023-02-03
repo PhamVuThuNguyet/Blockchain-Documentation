@@ -344,12 +344,6 @@ Có 3 loại:
   - Soft derivation cho phép người dùng "truy ngược" để tìm ra private key của account gốc nếu họ biết private key của account phái sinh. Ngoài ra, soft derivation thể hiện được sự liên kết giữa các accounts cùng seed. Nói cách khác, soft derivation cho phép proof-of-parent.
   - Hard derivation không cho phép điều đó
 
-## Advanced Staking Concepts
-
-### Staking proxies
-
-Polkadot cho phép tạo ra các account có chức năng đặc biệt, gọi là <b>proxy account</b>
-
 # Cryptography
 
 ## Hashing algorithm
