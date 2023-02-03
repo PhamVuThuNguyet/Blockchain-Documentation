@@ -303,10 +303,16 @@ Phragmms là một election rule mới được đặt tên dựa theo thuật t
 - Đảm bảo proportional representation (proportional justified representation - PJR) 
 - Tối đa hóa và phân bố đồng đều backing stake (stake supports) của validators nhất có thể.
 
-#### Maximin support objective and PJR
 Trong Polkadot, maximin support objective là tối đa hóa lượng backing stake nhỏ nhất của các validators. Tìm hiểu thêm tại <a href = "https://arxiv.org/pdf/2004.12990.pdf"> đây </a>
 
-PJR xem xét tỷ lệ quyền quyết định của voter. 
+Phragmms là một thuật toán tham lam, bắt đầu với một empty committee và thay 
+
+Cách hoạt động của thuật toán Phragmms:
+1. Khởi tạo committee A trống và edge weight vector w = 0
+2. Lặp lại 2 bước sau cho đến khi chọn đủ committee:
+   - Tìm unelected candidate có score cao nhất, thêm vào A
+   - Re-balance w  
+3. Trả về A và w
 
 ## BABE
 
