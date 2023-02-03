@@ -4,18 +4,18 @@
 
 ### Proof of Stake là gì?
 
-Proof of Stake (PoS) là một thuật toán đồng thuận cho phép người dùng kiếm được phần thưởng cho việc xác thực các khối trên blockchain.
+Proof of Stake (PoS) là một thuật toán đồng thuận cho phép người dùng kiếm được phần thưởng (rewards) từ việc xác thực các khối trên blockchain.
 
-Trong PoS, để có thể trở thành validator thì người dùng cần dựa vào sức mạnh phần cứng của mình. Điều này đòi hỏi người dùng đầu tư các phần cứng mining đắt tiền và tiêu thụ lượng điện lớn.
+Trong PoW, để có thể trở thành validator thì người dùng cần dựa vào sức mạnh phần cứng của mình. Điều này đòi hỏi người dùng đầu tư các phần cứng mining đắt tiền và tiêu thụ lượng điện lớn.
 
-Ngược lại, PoS hoạt động bằng cách chọn ngẫu nhiên validator dựa trên số lượng staked token trên chain. Lượng token sở hữu càng nhiều, khả năng được chọn làm validator càng lớn. Nếu validate sai thì người dùng phải chịu phạt là mất đi hết số lượng staked token.
+Ngược lại, PoS hoạt động bằng cách chọn ngẫu nhiên validator dựa trên số lượng token mà họ đặt cược (stake). Lượng locked token càng nhiều, khả năng được chọn làm validator càng lớn. Nếu validate sai thì người dùng phải chịu phạt là mất đi hết số lượng token đó.
 
 ### Ưu điểm
 
 - Không đòi hỏi máy cấu hình cao, bất kỳ ai cũng có thể thiết lập các node chuyên biệt trên máy tính hoặc máy chủ (server) của riêng mình.
 - Đôi khi có thể uỷ quyền (delegate) cho validator, nghĩa là người dùng gửi token cho validator để họ có thêm quyền vote, đổi lại người gửi cũng nhận được một phần phần thưởng mà không phải làm gì.
 - Tăng khả năng mở rộng và tốc độ giao dịch, cải thiện tính phân quyền vì việc validate có thể được thực hiện bởi bất cứ ai staking token trong mạng, tạo ra một mạng lưới phi tập trung.
-- Proof of Stake tiết kiệm môi trường hơn, không đòi hỏi tiêu thụ nhiều điện để hoạt động như Proof of Work.
+- Proof of Stake tiết kiệm tài nguyên và thân thiện với môi trường hơn, không đòi hỏi tiêu thụ nhiều điện để hoạt động như Proof of Work.
 
 ### Nhược điểm
 
@@ -27,27 +27,27 @@ Ngược lại, PoS hoạt động bằng cách chọn ngẫu nhiên validator d
 ## Nominated Proof of Stake (NPoS)
 
 Để giải quyết những nhược điểm của PoS, NPoS ra đời.
-NPoS là nơi mà các stakeholder có quyền chọn những validator cụ thể để tham gia vào cơ chế đồng thuận. Trong NPoS, có 2 role là <b>validators</b> và <b>nominators</b>. Trong NPoS, người dùng được khuyến khích tham gia vào việc bảo vệ mạng lưới bằng cách staking token và biểu quyết để bầu chọn validator có lịch sử hoạt động tốt. Chỉ các nút đã được đề cử mới được phép xác nhận các khối mới và kiếm phần thưởng.
+NPoS là nơi mà các stakeholder có quyền chọn những validator cụ thể để tham gia vào cơ chế đồng thuận. Trong NPoS, có 2 role là <b>validators</b> (trình xác thực) và <b>nominators</b> (trình đề cử). Trong NPoS, người dùng được khuyến khích tham gia vào việc bảo vệ mạng lưới bằng cách staking token và biểu quyết để chọn ra validators có lịch sử hoạt động tốt. Chỉ các nút đã được đề cử mới được phép xác nhận các khối mới và kiếm phần thưởng.
 
 ![Nominated Proof of Stake](../imgs/NPoS.png)
 
 <h4>CÁCH HOẠT ĐỘNG CỦA NPoS</h4>
-Định kỳ vài lần trong ngày, hệ thống sẽ chọn ra một nhóm các node được gọi là các validator. Chúng sẽ đóng vai trò quan trọng trong các giao thức như sản xuất khối (block production) và finality gadget của phiên kế tiếp.
+Định kỳ vài lần trong ngày, hệ thống sẽ chọn ra một nhóm các node được gọi là các validator. Chúng sẽ đóng vai trò quan trọng trong các giao thức như sản xuất khối (block production), validating parachain blocks, đảm bảo tính bất biến (finality).
 
-- Nhóm validator sẽ phải stake token theo dạng thế chấp, cam kết hoàn thành đúng nhiệm vụ. Bất kì hành động nào gây tổn hại đến giao thức, số token được stake sẽ bị cắt đi một phần. Ngược lại, nếu hoàn thành tốt, họ sẽ được thưởng. Tất cả các validator đều có trọng số như nhau (quyền biểu quyết như nhau) trong quá trình xác thực.
+- Nhóm validator sẽ phải stake token theo dạng thế chấp, cam kết hoàn thành đúng nhiệm vụ. Bất kì hành động nào gây tổn hại đến giao thức, số token được stake sẽ bị cắt đi một phần (1% lượng stake trong Polkadot). Ngược lại, nếu hoàn thành tốt, họ sẽ được thưởng. Tất cả các validator đều có trọng số như nhau (quyền biểu quyết như nhau) trong quá trình xác thực.
 
-- Các nominator cũng sẽ khóa token chung với validator mà họ bầu chọn và nhận thưởng theo tỉ lệ token họ đóng góp. Ngược lại khi validator của họ không hoàn thành đúng nhiệm vụ hoặc gây tổn hại đến giao thức, họ cũng sẽ bị cắt một phần token trong pool. Staked token của nominator được phân phối cho những validators được bầu chọn sao cho càng đồng đều càng tốt.
+- Các nominator cũng sẽ lock token chung với validator mà họ bầu chọn và nhận thưởng theo tỉ lệ token họ đóng góp (pro rata). Ngược lại khi validator của họ không hoàn thành đúng nhiệm vụ hoặc gây tổn hại đến giao thức, họ cũng sẽ bị cắt một phần token trong pool. Staked token của nominator được phân phối cho những validators mà họ lựa chọn sao cho càng đồng đều càng tốt.
 
 ![NPoS architecture](../imgs/NPoS%202.png)
 
 Cơ chế này khiến cho các bên có ý đồ xấu rất khó để có được sự bầu chọn từ nominator (vì cần phải xây dựng một lượng lớn danh tiếng để có được sự ủng hộ) và sẽ rất tốn kém để tấn công hệ thống (bởi cuộc tấn công nào cũng sẽ dẫn đến việc cắt giảm một lượng lớn DOT).
 
-NPoS cho phép hầu như tất cả các chủ sở hữu DOT tham gia một cách liên tục. Chính vì vậy sẽ duy trì được mức độ bảo mật cao bằng cách có những stake giá trị hơn và cho phép nhiều người kiếm được lợi nhuận dựa trên số vốn nắm giữ.
-
 Polkadot sử dụng các công cụ từ lý thuyết bầu cử (election theory) đến lý thuyết trò chơi (game theory) để tối ưu hóa rời rạc, nhằm phát triển một quy trình bầu chọn hiệu quả mang lại sự đại diện và bảo mật công bằng.
 
 ## NPoS Election algorithms
-Như đã nói ở trên, các validator có quyền gần như bằng nhau, nên điều quan trọng là phải đảm bảo số lượng staked token của mỗi validator được phân bố đồng đều. Polkadot sử dụng một thuật toán bầu cử (election algorithm) để tối ưu hoá 3 tham số khi tính toán solution graph của nominators và validators:
+
+Trong Polkadot, các validators sẽ nhận được phần thưởng gần như bằng nhau trong mỗi era, nên điều quan trọng là phải đảm bảo số lượng staked token của mỗi validator được phân bố đồng đều. Polkadot sử dụng một thuật toán bầu cử (election algorithm) để tối ưu hoá 3 tham số khi tính toán solution graph của nominators và validators:
+
 - Maximize tổng số token at stake (số token sẽ mất nếu validate sai)
 - Maximize staked token của validator đang có stake thấp nhất
 - Minimize phương sai (variance) của stake trong set
@@ -55,11 +55,248 @@ Như đã nói ở trên, các validator có quyền gần như bằng nhau, nê
 Sequential Phragmén, Phragmms, và Star balancing là một số thuật toán đáng chú ý mà Polkadot sử dụng.
 
 ### Sequential Phragmén
+
 Vào cuối thế kỷ 19, nhà toán học Thụy Điển Lars Edvard Phragmén đã đề xuất một phương pháp để bầu các thành viên vào quốc hội trong nước. Ông nhận thấy rằng những phương pháp bầu cử thời điểm đó có xu hướng nhường tất cả các ghế cho chính đảng phổ biến nhất.
 
 Ngược lại, phương pháp mới của ông đảm bảo rằng số ghế được ấn định cho mỗi đảng tỷ lệ thuận với số phiếu được trao cho họ, vì vậy nó giúp mang lại nhiều sự đại diện hơn cho bên thiểu số.
 
-#### Basic Phragmén
+Polkadot sử dụng sequential Phragmén trong quá trình lựa chọn validator (validator election) và lựa chọn council (council election). Khi lựa chọn council member, người dùng có thể chọn tối đa 16 ứng viên (candidates) và khóa một lượng token (reserved bond / reserved token) làm trọng số. Phragmén sẽ chạy một lần vào mỗi election để xác định top candidates và một lần nữa giữa các top candidates này để cân bằng trọng số vote của họ.
+
+#### Phragmén Algorithm
+
+_Tham khảo thêm tại <a href = "https://ojs.aaai.org/index.php/AAAI/article/view/10598">đây</a> và tại <a href = "https://arxiv.org/pdf/1611.08826.pdf">đây</a>_
+
+Thuật toán Phragmén sẽ chọn ra một candidate trong mỗi lần chạy, lặp đi lặp lại đến khi chọn đủ:
+
+1. Voter (nominator) gửi lá phiếu (ballot), đánh dấu những candidates mà họ chọn.
+2. Initial cost của mỗi ballot là 0
+3. Giả sử candidate được lựa chọn có _n_ ballot, candidate này sẽ bị cộng thêm _1/n_ vào cost.
+4. Candidate được chọn là người mà mean cost của những ballot ủng hộ họ nhỏ nhất.
+5. Cập nhật cost của tất cả ballots đã vote cho winner của vòng này.
+6. Quay lại từ bước 3 cho tới khi chọn đủ
+
+<b>Ví dụ:</b>
+
+```
+Open Seats: 3
+
+Candidates:   A B C D  L0
+-------------------------
+Voter V1:       X      0
+Voter V2:         X X  0
+Voter V3:       X   X  0
+Voter V4:     X X      0
+Voter V5:       X X X  0
+```
+
+Trong round 1, vì initial cost đều bằng 0 nên candidate được lựa chọn là người có số vote cao nhất (1/n nhỏ nhất).
+
+```
+Filled seats: 1 (B)
+Open Seats: 2
+
+Candidates:   A B C D  L0 L1
+-----------------------------
+Voter V1:       X      0  1/4
+Voter V2:         X X  0  0
+Voter V3:       X   X  0  1/4
+Voter V4:     X X      0  1/4
+Voter V5:       X X X  0  1/4
+```
+
+Tiếp tục xét A, C, D:
+
+- Có 1 ballot vote cho A, với cost 1/4
+- Có 2 ballot vote cho C, với cost 0 + 1/4
+- Có 3 ballot vote cho D, với cost 0 + 1/4 + 1/4
+
+Nếu:
+
+- A win, cost = (1/4 + 1/1) / 1 = 5/4
+- C win, cost = (0 + 1/4 + 1/2) / 2 = 5/8
+- D win, cost = (0 + 1/4 + 1/4 + 1/3) / 3 = 1/2
+
+Vì 1/2 nhỏ nhất nên D được chọn ở vòng này.
+
+```
+Filled seats: 2 (B, D)
+Open Seats: 1
+
+Candidates:   A B C D  L0 L1  L2
+---------------------------------
+Voter V1:       X      0  1/4 1/4
+Voter V2:         X X  0  0   1/2
+Voter V3:       X   X  0  1/4 1/2
+Voter V4:     X X      0  1/4 1/4
+Voter V5:       X X X  0  1/4 1/2
+```
+
+Tương tự như trên, C được chọn trong vòng cuối.
+
+```
+Filled seats: 3 (B, D, C)
+Open Seats: 0
+
+Candidates:   A B C D  L0 L1  L2  L3
+------------------------------------
+Voter V1:       X      0  1/4 1/4 1/4
+Voter V2:         X X  0  0   1/2 1
+Voter V3:       X   X  0  1/4 1/2 1/2
+Voter V4:     X X      0  1/4 1/4 1/4
+Voter V5:       X X X  0  1/4 1/2 1
+```
+
+_Insight: Tổng cost của các ballot luôn bằng số candidate đã chọn tính tới round đó_
+
+#### Weighted Phragmén
+
+Trong ví dụ trên, chúng ta xem tất cả các voter đều có trọng số ngang nhau. Tuy nhiên trong Polkadot, ballot được gán trọng số bằng số lượng token của mỗi voter (nominator).
+
+Weighted Phragmén cũng hoạt động tương tự như trên, tuy nhiên có thêm tính năng để phân bổ trọng số (stake) của các candidates (validators).
+
+1. Khởi tạo danh sách các nominators, lượng staked token của họ, và danh sách validators họ support.
+2. Khởi tạo đồ thị có trọng số (edge-weighted graph) mapping giữa nominators và validators, trong đó trọng số của mỗi edge là tổng _potential weight_ (staked token) của nominator đó. Tổng của tất cả các potential weight cho một validator được gọi là _approval stake_.
+3. Initial score của mỗi validator bằng `1/approval_stake`
+4. Với mỗi nominator, update score của validator mà họ support bằng cách cộng thêm một lượng `(total_budget * nominator_cost) / approval_stake`
+5. Lựa chọn validator có score nhỏ nhất.
+6. Cập nhật trọng số của mỗi edge kết nối tới validator đã chọn `score - nominator_load`, và cập nhật `nominator_cost=score`
+7. Quay lại bước 4 cho tới khi chọn đủ
+8. Tính backing stake của mỗi candidate bằng tổng các backing stake mà voter phân bố cho candidate đó `budget * edge_weight / nominator_cost`
+
+<b> Ví dụ: </b>
+
+```
+Filled seats: 0
+Open Seats: 3
+
+Candidates:    A B C D E  L0
+----------------------------
+Voter V1 (1):  X X        0
+Voter V2 (2):  X X        0
+Voter V3 (3):  X          0
+Voter V4 (4):    X X X    0
+Voter V5 (5):  X     X    0
+```
+
+Tính approval stake cho mỗi candidate.
+
+```
+Candidate A: 1 + 2 + 3 + 5 = 11
+Candidate B: 1 + 2 + 4 = 7
+Candidate C: 4 = 4
+Candidate D: 4 + 5 = 9
+Candidate E: 0
+```
+
+E không có vote nào nên không cần phải xem xét. Tiếp theo tính initial score của các candidate.
+
+```
+Candidate A: 1 / 11 = 0.091
+Candidate B: 1 / 7 = 0.143
+Candidate C: 1 / 4 = 0.25
+Candidate D: 1 / 9 = 0.111
+Candidate E: N/A
+```
+
+Tiếp theo là update score của mỗi candidate. Tuy nhiên trong round đầu, initial cost của voter đều là 0 nên chúng ta đơn giản lựa chọn candidate có initial score thấp nhất.
+
+Tất cả những edge kết nối đến A lúc này phải được cập nhật trọng số.
+
+```
+Edge(Voter -> A) = 0.091
+```
+
+Cost của voter cũng được cập nhật.
+
+```
+Filled seats: 1 (A)
+Open Seats: 2
+
+Candidates:    A B C D E  L0 L1
+----------------------------------
+Voter V1 (1):  X X        0  0.091
+Voter V2 (2):  X X        0  0.091
+Voter V3 (3):  X          0  0.091
+Voter V4 (4):    X X X    0  0
+Voter V5 (5):  X     X    0  0.091
+```
+
+Quay trở lại lựa chọn các candidates tiếp theo.
+
+```
+Candidate B: 0.182
+Candidate C: 0.25
+Candidate D: 0.162
+```
+
+Trong round này, chúng ta lựa chọn D.
+
+```
+Filled seats: 2 (A, D)
+Open Seats: 1
+
+Candidates:    A B C D E  L0 L1    L2
+-----------------------------------
+Voter V1 (1):  X X        0  0.091 0.091
+Voter V2 (2):  X X        0  0.091 0.091
+Voter V3 (3):  X          0  0.091 0.091
+Voter V4 (4):    X X X    0  0     0.162
+Voter V5 (5):  X     X    0  0.091 0.162
+```
+
+Tương tự, round cuối chọn B
+
+```
+Filled seats: 3 (A, D, B)
+Open Seats: 0
+
+Candidates:    A B C D E  L0 L1    L2    L3
+------------------------------------------
+Voter V1 (1):  X X        0  0.091 0.091 0.274
+Voter V2 (2):  X X        0  0.091 0.091 0.274
+Voter V3 (3):  X          0  0.091 0.091 0.091
+Voter V4 (4):    X X X    0  0     0.162 0.274
+Voter V5 (5):  X     X    0  0.091 0.162 0.162
+```
+
+Bây giờ chúng ta cần xác định số stake mà voter nên phân bổ tới các candidate. Ta có trọng số các edge:
+
+```
+Nominator: V1
+    Edge to A weight= 0.091
+    Edge to B weight= 0.183
+Nominator: V2
+    Edge to A weight= 0.091
+    Edge to B weight= 0.183
+Nominator: V3
+    Edge to A weight= 0.091
+Nominator: V4
+    Edge to B weight= 0.113
+    Edge to D weight= 0.162
+Nominator: V5
+    Edge to A weight= 0.091
+    Edge to D weight= 0.071
+```
+
+Ví dụ với nominator V1 và validator A
+
+```
+backing_stake (A) = 1 * 0.091 / 0.274 = 0.332
+```
+
+Tương tự ta có kết quả cuối cùng
+
+```
+A is elected with stake 6.807.
+D is elected with stake 4.545.
+B is elected with stake 3.647.
+
+V1 supports: A with stake: 0.332 and B with stake: 0.668.
+V2 supports: A with stake: 0.663 and B with stake: 1.337.
+V3 supports: A with stake: 3.0.
+V4 supports: B with stake: 1.642 and D with stake: 2.358.
+V5 supports: A with stake: 2.813 and D with stake: 2.187.
+```
 
 ## BABE
 
