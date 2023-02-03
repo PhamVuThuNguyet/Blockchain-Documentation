@@ -298,11 +298,21 @@ V4 supports: B with stake: 1.642 and D with stake: 2.358.
 V5 supports: A with stake: 2.813 and D with stake: 2.187.
 ```
 
+### Phragmms (aka Balphragmms)
+Phragmms là một election rule mới được đặt tên dựa theo thuật toán Phragmén, được sử dụng trong Kusama và Polkadot. Nó xem xét 2 mục tiêu khi lựa chọn validator: 
+- Đảm bảo proportional representation (proportional justified representation - PJR) 
+- Tối đa hóa và phân bố đồng đều backing stake (stake supports) của validators nhất có thể.
+
+#### Maximin support objective and PJR
+Trong Polkadot, maximin support objective là tối đa hóa lượng backing stake nhỏ nhất của các validators. Tìm hiểu thêm tại <a href = "https://arxiv.org/pdf/2004.12990.pdf"> đây </a>
+
+PJR xem xét tỷ lệ quyền quyết định của voter. 
+
 ## BABE
 
 ## GRANDPA
 
-## Hybrid consensus
+## Hybrid consensus  
 
 ## Randomness
 
