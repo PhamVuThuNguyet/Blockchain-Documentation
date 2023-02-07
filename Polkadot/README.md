@@ -42,11 +42,11 @@ NPoS là nơi mà các stakeholder có quyền chọn những validator cụ th�
 
 Cơ chế này khiến cho các bên có ý đồ xấu rất khó để có được sự bầu chọn từ nominator (vì cần phải xây dựng một lượng lớn danh tiếng để có được sự ủng hộ) và sẽ rất tốn kém để tấn công hệ thống (bởi cuộc tấn công nào cũng sẽ dẫn đến việc cắt giảm một lượng lớn DOT).
 
-Polkadot sử dụng các công cụ từ lý thuyết bầu cử (election theory) đến lý thuyết trò chơi (game theory) để tối ưu hóa rời rạc, nhằm phát triển một quy trình bầu chọn hiệu quả mang lại sự đại diện và bảo mật công bằng.
+Polkadot sử dụng các công cụ từ lý thuyết bầu cử (election theory) đến lý thuyết trò chơi (game theory) để tối ưu hóa rời rạc, nhằm phát triển một quy trình bầu chọn hiệu quả mang lại sự đại diện công bằng (fair representaion) và bảo mật.
 
 ## NPoS Election algorithms
 
-Trong Polkadot, các validators sẽ nhận được phần thưởng gần như bằng nhau trong mỗi era, nên điều quan trọng là phải đảm bảo số lượng staked token của mỗi validator được phân bố đồng đều. Polkadot sử dụng một thuật toán bầu cử (election algorithm) để tối ưu hoá 3 tham số khi tính toán solution graph của nominators và validators:
+Trong Polkadot, các validators sẽ có quyền gần như ngang nhau, nên điều quan trọng là phải đảm bảo số lượng staked token của mỗi validator được phân bố đồng đều, hay nói cách khác số lượng staked token của mỗi nominator cần được phân bố tới các validator mà họ chọn càng đồng đều càng tốt. Polkadot sử dụng một thuật toán bầu cử (election algorithm) để tối ưu hoá 3 tham số khi tính toán solution graph của nominators và validators:
 
 - Maximize tổng số token at stake (số token sẽ mất nếu validate sai)
 - Maximize staked token của validator đang có stake thấp nhất
@@ -58,7 +58,13 @@ Sequential Phragmén, Phragmms, và Star balancing là một số thuật toán 
 
 Vào cuối thế kỷ 19, nhà toán học Thụy Điển Lars Edvard Phragmén đã đề xuất một phương pháp để bầu các thành viên vào quốc hội trong nước. Ông nhận thấy rằng những phương pháp bầu cử thời điểm đó có xu hướng nhường tất cả các ghế cho chính đảng phổ biến nhất.
 
-Ngược lại, phương pháp mới của ông đảm bảo rằng số ghế được ấn định cho mỗi đảng tỷ lệ thuận với số phiếu được trao cho họ, vì vậy nó giúp mang lại nhiều sự đại diện hơn cho bên thiểu số.
+Ngược lại, phương pháp mới của ông đảm bảo rằng số ghế được ấn định cho mỗi đảng tỷ lệ thuận với số phiếu được trao cho họ, vì vậy nó giúp mang lại nhiều sự đại diện hơn cho bên thiểu số. Quy tắc này có thể tạm hiểu rằng bất kỳ nominator nào nắm giữ ít nhất 1/n tổng số stake đều được đảm bảo có ít nhất một trong số những validator của họ được chọn.
+
+![Fair representation](../imgs/Phragmen.webp)
+
+Ngoài ra chúng ta cần phân bố staked token sao cho cân bằng nhất có thể.
+
+![Security](../imgs/Phragmen%202.webp)
 
 Polkadot sử dụng sequential Phragmén trong quá trình lựa chọn validator (validator election) và lựa chọn council (council election). Khi lựa chọn council member, người dùng có thể chọn tối đa 16 ứng viên (candidates) và khóa một lượng token (reserved bond / reserved token) làm trọng số. Phragmén sẽ chạy một lần vào mỗi election để xác định top candidates và một lần nữa giữa các top candidates này để cân bằng trọng số vote của họ.
 
@@ -299,26 +305,27 @@ V5 supports: A with stake: 2.813 and D with stake: 2.187.
 ```
 
 ### Phragmms (aka Balphragmms)
-Phragmms là một election rule mới được đặt tên dựa theo thuật toán Phragmén, được sử dụng trong Kusama và Polkadot. Nó xem xét 2 mục tiêu khi lựa chọn validator: 
-- Đảm bảo proportional representation (proportional justified representation - PJR) 
+
+Phragmms là một election rule mới được đặt tên dựa theo thuật toán Phragmén, được sử dụng trong Kusama và Polkadot. Nó xem xét 2 mục tiêu khi lựa chọn validator:
+
+- Đảm bảo proportional representation (proportional justified representation - PJR)
 - Tối đa hóa và phân bố đồng đều backing stake (stake supports) của validators nhất có thể.
 
 Trong Polkadot, maximin support objective là tối đa hóa lượng backing stake nhỏ nhất của các validators. Tìm hiểu thêm tại <a href = "https://arxiv.org/pdf/2004.12990.pdf"> đây </a>
 
-Phragmms là một thuật toán tham lam, bắt đầu với một empty committee và thay 
-
 Cách hoạt động của thuật toán Phragmms:
+
 1. Khởi tạo committee A trống và edge weight vector w = 0
 2. Lặp lại 2 bước sau cho đến khi chọn đủ committee:
    - Tìm unelected candidate có score cao nhất, thêm vào A
-   - Re-balance w  
+   - Re-balance w
 3. Trả về A và w
 
 ## BABE
 
 ## GRANDPA
 
-## Hybrid consensus  
+## Hybrid consensus
 
 ## Randomness
 
@@ -498,7 +505,7 @@ $$
 
 ![Montgomery curve](../imgs/Montgomery%20curve.png)
 
-Như đã nói ở trên, Polkadot không dùng thuật toán ECDSA mà sử dụng thuật toán chữ ký Schnorr. Loại chữ ký này sở hữu một đặc tính mạnh mẽ là <b>độ tuyến tính</b>. Dễ hiểu hơn, điều này làm cho loại chữ ký này này đặc biệt phù hợp với các giao dịch đa chữ ký. (Tham khảo thêm ở <a href="https://en.wikipedia.org/wiki/Schnorr_signature">đây</a>)
+Như đã nói ở trên, Polkadot không dùng thuật toán ECDSA mà sử dụng thuật toán chữ ký Schnorr. Loại chữ ký này sở hữu một đặc tính mạnh mẽ là <b>độ tuyến tính</b>. Dễ hiểu hơn, điều này làm cho loại chữ ký này này đặc biệt phù hợp với các giao dịch đa chữ ký. (Tham khảo thêm ở <a href="https://en.wikipedia.org/wiki/Schnorr_signature">đây</a> và ở <a href = "https://research.web3.foundation/en/latest/crypto/multisig.html">đây</a>)
 
 ## Keys
 
