@@ -46,13 +46,13 @@ Polkadot sử dụng các công cụ từ lý thuyết bầu cử (election theo
 
 ## NPoS Election algorithms
 
-Trong Polkadot, các validators sẽ nhận được phần thưởng gần như bằng nhau trong mỗi era, nên điều quan trọng là phải đảm bảo số lượng staked token của mỗi validator được phân bố đồng đều. Polkadot sử dụng một thuật toán bầu cử (election algorithm) để tối ưu hoá 3 tham số khi tính toán solution graph của nominators và validators:
+Trong Polkadot, các validators sẽ có quyền gần như ngang bằng nhau, nên điều quan trọng là phải đảm bảo số lượng staked token của mỗi validator được phân bố đồng đều. Polkadot sử dụng một thuật toán bầu cử (election algorithm) để tối ưu hoá 3 tham số khi tính toán solution graph của nominators và validators:
 
 - Maximize tổng số token at stake (số token sẽ mất nếu validate sai)
 - Maximize staked token của validator đang có stake thấp nhất
 - Minimize phương sai (variance) của stake trong set
 
-Sequential Phragmén, Phragmms, và Star balancing là một số thuật toán đáng chú ý mà Polkadot sử dụng.
+Sequential Phragmén, Phragmms, và Star balancing là một số thuật toán đáng chú ý mà Polkadot sử dụng. Tìm hiểu thêm tại <a href = "https://arxiv.org/abs/2004.12990">đây</a>
 
 ### Sequential Phragmén
 
@@ -299,26 +299,39 @@ V5 supports: A with stake: 2.813 and D with stake: 2.187.
 ```
 
 ### Phragmms (aka Balphragmms)
-Phragmms là một election rule mới được đặt tên dựa theo thuật toán Phragmén, được sử dụng trong Kusama và Polkadot. Nó xem xét 2 mục tiêu khi lựa chọn validator: 
-- Đảm bảo proportional representation (proportional justified representation - PJR) 
+
+Phragmms là một election rule mới được đặt tên dựa theo thuật toán Phragmén, được sử dụng trong Kusama và Polkadot. Nó xem xét 2 mục tiêu khi lựa chọn validator:
+
+- Đảm bảo proportional representation (proportional justified representation - PJR)
 - Tối đa hóa và phân bố đồng đều backing stake (stake supports) của validators nhất có thể.
 
 Trong Polkadot, maximin support objective là tối đa hóa lượng backing stake nhỏ nhất của các validators. Tìm hiểu thêm tại <a href = "https://arxiv.org/pdf/2004.12990.pdf"> đây </a>
 
-Phragmms là một thuật toán tham lam, bắt đầu với một empty committee và thay 
-
 Cách hoạt động của thuật toán Phragmms:
+
 1. Khởi tạo committee A trống và edge weight vector w = 0
 2. Lặp lại 2 bước sau cho đến khi chọn đủ committee:
    - Tìm unelected candidate có score cao nhất, thêm vào A
-   - Re-balance w  
+   - Re-balance w
 3. Trả về A và w
+
+### Computing a balanced solution
+
+Phần này hướng đến việc thiết kế một thuật toán tối ưu để assign nominators' stake tới các validators. Có 2 hướng để giải quyết bài toán balancing là <i>parametric flow algorithms</i> và <i>star balancing heuristic</i>. Chúng ta sẽ xem xét cả 2 và so sánh chúng.
+
+#### Notation
+
+>Note: Đồ thị lưỡng phân là một đồ thị đặc biệt, trong đó tập các đỉnh có thể được chia thành hai tập không giao nhau thỏa mãn điều kiện không có cạnh nối hai đỉnh bất kỳ thuộc cùng một tập.
+
+Xét một ví dụ NPoS gồm một đồ thị lưỡng phân $(N \cup A, E)$, trong đó $N$ là set các nominators, $A$ là set các elected validators (committee) size $k$, với $k \coloneqq \lvert A \rvert \ll \lvert N \rvert$, tồn tại cạnh $nv \in E$ khi nominator $n$ ủng hộ (approve) cho validator $v \in A$.
+
+
 
 ## BABE
 
 ## GRANDPA
 
-## Hybrid consensus  
+## Hybrid consensus
 
 ## Randomness
 
