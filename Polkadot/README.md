@@ -52,7 +52,7 @@ Trong Polkadot, các validators sẽ có quyền gần như ngang nhau, nên đi
 - Maximize staked token của validator đang có stake thấp nhất
 - Minimize phương sai (variance) của stake trong set
 
-Sequential Phragmén, Phragmms, và Star balancing là một số thuật toán đáng chú ý mà Polkadot sử dụng.
+Sequential Phragmén, Phragmms, và Star balancing là một số thuật toán đáng chú ý mà Polkadot sử dụng. Tìm hiểu thêm tại <a href = "https://arxiv.org/abs/2004.12990">đây</a>
 
 ### Sequential Phragmén
 
@@ -309,27 +309,78 @@ V5 supports: A with stake: 2.813 and D with stake: 2.187.
 Phragmms là một election rule mới được đặt tên dựa theo thuật toán Phragmén, được sử dụng trong Kusama và Polkadot. Nó xem xét 2 mục tiêu khi lựa chọn validator:
 
 - Đảm bảo proportional representation (proportional justified representation - PJR)
+
+Phragmms là một election rule mới được đặt tên dựa theo thuật toán Phragmén, được sử dụng trong Kusama và Polkadot. Nó xem xét 2 mục tiêu khi lựa chọn validator:
+
+- Đảm bảo proportional representation (proportional justified representation - PJR)
 - Tối đa hóa và phân bố đồng đều backing stake (stake supports) của validators nhất có thể.
 
 Trong Polkadot, maximin support objective là tối đa hóa lượng backing stake nhỏ nhất của các validators. Tìm hiểu thêm tại <a href = "https://arxiv.org/pdf/2004.12990.pdf"> đây </a>
 
 Cách hoạt động của thuật toán Phragmms:
 
+
 1. Khởi tạo committee A trống và edge weight vector w = 0
 2. Lặp lại 2 bước sau cho đến khi chọn đủ committee:
    - Tìm unelected candidate có score cao nhất, thêm vào A
    - Re-balance w
+   - Re-balance w
 3. Trả về A và w
+
+### Computing a balanced solution
+
+Phần này hướng đến việc thiết kế một thuật toán tối ưu để assign nominators' stake tới các validators. Có 2 hướng để giải quyết bài toán balancing là <i>parametric flow algorithms</i> và <i>star balancing heuristic</i>. Chúng ta sẽ xem xét cả 2 và so sánh chúng.
+
+#### Notation
+
+> Note: Đồ thị lưỡng phân là một đồ thị đặc biệt, trong đó tập các đỉnh có thể được chia thành hai tập không giao nhau thỏa mãn điều kiện không có cạnh nối hai đỉnh bất kỳ thuộc cùng một tập.
+
+Xét một ví dụ NPoS gồm một đồ thị lưỡng phân $(N \cup A, E)$, trong đó $N$ là set các nominators, $A$ là set các elected validators (committee) size $k$, với $k \coloneqq \lvert A \rvert \ll \lvert N \rvert$, tồn tại cạnh $nv \in E$ khi nominator $n$ ủng hộ (approve) cho validator $v \in A$.
+
+Cho vector nominator stakes $s \in R_{\geq 0}^N$, trong đó $s_n$ là stake của nominator $n$.
+
+Một edge weight vector hợp lý $w \in R_{\geq 0}^N$ phải có tất cả các phần tử không âm (component-wise non-negative) và thỏa mãn điều kiện: $\sum_{v \in A: nv \in E}{w_{nv} \leq s_n}$ với mỗi nominator $n \in N$. $w$ được coi là "tight" nếu bất đẳng thức trên "tight" với tất cả các nominator có ít nhất một neighbour valivator trong $A$.
+
+> Note: An inequality is tight if there is some choice of the variables involved for which equality holds. Otherwise it is not.
+
+> Note: Nếu G là đồ thị vô hướng không có khuyên (cạnh nối một đỉnh với chính nó), ma trận liên thuộc (hay liên kết đỉnh cạnh) của đồ thị G, ký hiệu A(G), là ma trận n\*m (n: số đỉnh, m: số cạnh) được định nghĩa là A = ($A_{ij}$) với quy ước:
+
+    * $A_{ij}$ = 1 nếu đỉnh i kề với cạnh j.
+    * $A_{ij}$ = 0 nếu ngược lại.
+
+Gọi $B \in {0, 1}^{A \times E}$ là ma trận liên thuộc cho validator set $A$. Với bất kỳ $w \in R_{\geq 0}^E$, tổng support mà $w$ assign cho mỗi validator được thể hiện bằng vector $supp_w(v) = (Bw)_v = \sum_{n \in N: nv \in E}{w_{nv}}$.
+
+Nhiệm vụ cần giải quyết trong bài toán balancing là tìm một tight vector $w$ để tối thiểu hóa $l_2$ norm của support vector, hay nói cách khác, cần tối thiểu giá trị: $$val(w) \coloneqq \Vert supp_w \Vert_2 = \Vert Bw \Vert_2$$
+
+## Hybrid consensus
+Sự đồng thuận trong blockchain chủ yếu diễn ra ở hai họat động: tạo khối và hoàn thiện chuỗi (block creation và chain finalization). Hai hoạt động này không tách biệt nhau trong mạng.
+1. Nhược điểm của hoạt động block creation và chain finalization
+- Chain Creation:
+   + PoW: Tiêu thụ năng lượng điện cao, tiêu tốn nhiều tài nguyên phần cứng …
+   + PoS, DPoS: Mạng có thể bị tấn công nếu nhiều validator cố tình làm sai, hoặc validator bị điều khiển.
+- Chain finalization:
+   + Không có mốc thời gian cụ thể là khi nào chain sẽ được xác nhận cuối cùng (finalization)
+   + Về lý thuyết blockchain ledger có thể bị sửa đổi sau nhiều năm, nhiều chục năm.
+2. Polkadot đã làm gì để khác biệt ?
+Ý tưởng của họ là tách 2 quá trình block creation và chain finalization
+- block creation (hay block authoriation) sử dụng BABE (Blind Assigment for Blockchain Extention)
++ BABE là một thuật toán dựa trên slot, dùng bằng chứng cổ phần (PoS)
++ BABE được thiết kế để tạo ra các khối trên mạng Polkadot. Nó đạt được điều này bằng cách hoạt động giữa các nút xác thực để xác định việc tạo khối mới. BABE phân bổ các vị trí sản xuất khối cho trình xác thực dựa trên số lượng DOT mà họ đã đặt cược, sử dụng chu kỳ ngẫu nhiên tương tự như thuật toán đồng thuận Ouroboros Praos . 
++ Để tạo ra một block cần một khoảng thời gian, khoảng thời gian đó gọi là epoch, Polkadot chia thành nhiều epoch, trong mỗi epoch lại chia làm nhiều slot, một slot khoảng 6s, cứ 6 giây này có 1 block được tạo ra.
++ Đầu mỗi epoch tập hợp các validators được lựa chọn, các validator đó sẽ làm việc trong suốt epoch tiếp theo. Tương tự, vào đầu slot cũng có những validator được lựa chọn để làm việc trong slot tiếp. 
+
+Làm như nào để chọn được validator làm việc trong 1 slot nhất định ?
++ Phương pháp đơn gian nhất là round-robin: kiểu chọn xoay vòng, lần này người này làm thì lần sau đến người tiếp theo. Tuy nhiên, nhược điểm là coordinate attack vì validator làm việc trong slot tiếp theo sẽ được biết trước.
++ Sau đó họ khắc phục bằng phường pháp Blind Assignment thông qua lựa chọn ngẫu nhiên.
+
+- Chain finalization sử dụng GRANPA
++ Các validator sẽ vote ở chain, không phải ở block (với PoW, PoS các validator vote cho từng block, sau đó broadcast kết quả cho các node toàn mạng). Khi vote cho chain thì các block trong chain đó mặc định được vote luôn.
++ GRANDPA là cơ chế cuối cùng cho Chuỗi chuyển tiếp Polkadot. Nó hoạt động miễn là 2/3 số nút hoạt động chính xác và có thể hoạt động với 1/5 số nút Byzantine không đồng bộ (có nghĩa là GRANDPA hoạt động chính xác ngay cả khi 1/5 số nút không đồng bộ). Khi hơn 2/3 trình xác nhận chứng thực chuỗi chứa một khối cụ thể, tất cả các khối tương ứng dẫn đến khối đó sẽ được hoàn thiện đồng thời. GRANDPA đạt được thỏa thuận về chuỗi thay vì các khối cụ thể, hợp lý hóa đáng kể quy trình hoàn thiện giao dịch. Trong điều kiện mạng tối ưu, việc hoàn thành gần như ngay lập tức. Trong điều kiện mạng kém, GRANDPA có thể hoàn thiện về mặt lý thuyết hàng triệu khối đồng thời khi các vấn đề được giải quyết.
+-> Có thể nói Polkadot dùng BABE và GRANPA để tạo ra một dạng Hybrid Consensus nhằm tối ưu hóa việc block creation và chain finalization.
 
 ## BABE
 
 ## GRANDPA
-
-## Hybrid consensus
-
-## Randomness
-
-## Staking miners
 
 # Accounts
 
