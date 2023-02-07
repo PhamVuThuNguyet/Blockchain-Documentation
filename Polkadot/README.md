@@ -321,21 +321,30 @@ Phần này hướng đến việc thiết kế một thuật toán tối ưu đ
 
 #### Notation
 
->Note: Đồ thị lưỡng phân là một đồ thị đặc biệt, trong đó tập các đỉnh có thể được chia thành hai tập không giao nhau thỏa mãn điều kiện không có cạnh nối hai đỉnh bất kỳ thuộc cùng một tập.
+> Note: Đồ thị lưỡng phân là một đồ thị đặc biệt, trong đó tập các đỉnh có thể được chia thành hai tập không giao nhau thỏa mãn điều kiện không có cạnh nối hai đỉnh bất kỳ thuộc cùng một tập.
 
 Xét một ví dụ NPoS gồm một đồ thị lưỡng phân $(N \cup A, E)$, trong đó $N$ là set các nominators, $A$ là set các elected validators (committee) size $k$, với $k \coloneqq \lvert A \rvert \ll \lvert N \rvert$, tồn tại cạnh $nv \in E$ khi nominator $n$ ủng hộ (approve) cho validator $v \in A$.
 
+Cho vector nominator stakes $s \in R_{\geq 0}^N$, trong đó $s_n$ là stake của nominator $n$.
 
+Một edge weight vector hợp lý $w \in R_{\geq 0}^N$ phải có tất cả các phần tử không âm (component-wise non-negative) và thỏa mãn điều kiện: $\sum_{v \in A: nv \in E}{w_{nv} \leq s_n}$ với mỗi nominator $n \in N$. $w$ được coi là "tight" nếu bất đẳng thức trên "tight" với tất cả các nominator có ít nhất một neighbour valivator trong $A$.
+
+> Note: An inequality is tight if there is some choice of the variables involved for which equality holds. Otherwise it is not.
+
+> Note: Nếu G là đồ thị vô hướng không có khuyên (cạnh nối một đỉnh với chính nó), ma trận liên thuộc (hay liên kết đỉnh cạnh) của đồ thị G, ký hiệu A(G), là ma trận n\*m (n: số đỉnh, m: số cạnh) được định nghĩa là A = ($A_{ij}$) với quy ước:
+
+    * $A_{ij}$ = 1 nếu đỉnh i kề với cạnh j.
+    * $A_{ij}$ = 0 nếu ngược lại.
+
+Gọi $B \in {0, 1}^{A \times E}$ là ma trận liên thuộc cho validator set $A$. Với bất kỳ $w \in R_{\geq 0}^E$, tổng support mà $w$ assign cho mỗi validator được thể hiện bằng vector $supp_w(v) = (Bw)_v = \sum_{n \in N: nv \in E}{w_{nv}}$.
+
+Nhiệm vụ cần giải quyết trong bài toán balancing là tìm một tight vector $w$ để tối thiểu hóa $l_2$ norm của support vector, hay nói cách khác, cần tối thiểu giá trị: $$val(w) \coloneqq \Vert supp_w \Vert_2 = \Vert Bw \Vert_2$$
+
+## Hybrid consensus
 
 ## BABE
 
 ## GRANDPA
-
-## Hybrid consensus
-
-## Randomness
-
-## Staking miners
 
 # Accounts
 
