@@ -344,24 +344,26 @@ Nhiệm vụ cần giải quyết trong bài toán balancing là tìm một tigh
 Sự đồng thuận trong blockchain chủ yếu diễn ra ở hai họat động: tạo khối và hoàn thiện chuỗi (block creation và chain finalization). Hai hoạt động này không tách biệt nhau trong mạng.
 1. Nhược điểm của hoạt động block creation và chain finalization
 - Chain Creation:
-+ PoW: Tiêu thụ năng lượng điện cao, tiêu tốn nhiều tài nguyên phần cứng …
-+ PoS, DPoS: Mạng có thể bị tấn công nếu nhiều validator cố tình làm sai, hoặc validator bị điều khiển.
+   + PoW: Tiêu thụ năng lượng điện cao, tiêu tốn nhiều tài nguyên phần cứng …
+   + PoS, DPoS: Mạng có thể bị tấn công nếu nhiều validator cố tình làm sai, hoặc validator bị điều khiển.
 - Chain finalization:
-+ Không có mốc thời gian cụ thể là khi nào chain sẽ được xác nhận cuối cùng (finalization)
-+ Về lý thuyết blockchain ledger có thể bị sửa đổi sau nhiều năm, nhiều chục năm.
+   + Không có mốc thời gian cụ thể là khi nào chain sẽ được xác nhận cuối cùng (finalization)
+   + Về lý thuyết blockchain ledger có thể bị sửa đổi sau nhiều năm, nhiều chục năm.
 2. Polkadot đã làm gì để khác biệt ?
 Ý tưởng của họ là tách 2 quá trình block creation và chain finalization
 - block creation (hay block authoriation) sử dụng BABE (Blind Assigment for Blockchain Extention)
 + BABE là một thuật toán dựa trên slot, dùng bằng chứng cổ phần (PoS)
++ BABE được thiết kế để tạo ra các khối trên mạng Polkadot. Nó đạt được điều này bằng cách hoạt động giữa các nút xác thực để xác định việc tạo khối mới. BABE phân bổ các vị trí sản xuất khối cho trình xác thực dựa trên số lượng DOT mà họ đã đặt cược, sử dụng chu kỳ ngẫu nhiên tương tự như thuật toán đồng thuận Ouroboros Praos . 
 + Để tạo ra một block cần một khoảng thời gian, khoảng thời gian đó gọi là epoch, Polkadot chia thành nhiều epoch, trong mỗi epoch lại chia làm nhiều slot, một slot khoảng 6s, cứ 6 giây này có 1 block được tạo ra.
-+ Đầu mỗi epoch tập hợp các validators được lựa chọn, các validator đó sẽ làm việc trong suốt epoch tiếp theo. Tương tự, vào đầu slot cũng có những validator được lựa chọn để làm việc trong slot tiếp. (hình 1)
++ Đầu mỗi epoch tập hợp các validators được lựa chọn, các validator đó sẽ làm việc trong suốt epoch tiếp theo. Tương tự, vào đầu slot cũng có những validator được lựa chọn để làm việc trong slot tiếp. 
 
 Làm như nào để chọn được validator làm việc trong 1 slot nhất định ?
 + Phương pháp đơn gian nhất là round-robin: kiểu chọn xoay vòng, lần này người này làm thì lần sau đến người tiếp theo. Tuy nhiên, nhược điểm là coordinate attack vì validator làm việc trong slot tiếp theo sẽ được biết trước.
 + Sau đó họ khắc phục bằng phường pháp Blind Assignment thông qua lựa chọn ngẫu nhiên.
+
 - Chain finalization sử dụng GRANPA
 + Các validator sẽ vote ở chain, không phải ở block (với PoW, PoS các validator vote cho từng block, sau đó broadcast kết quả cho các node toàn mạng). Khi vote cho chain thì các block trong chain đó mặc định được vote luôn.
-+ GRANPA hoạt động theo nguyên tắc: một chain có ít nhất 2/3 số vote của validators sẽ là chain finalization (hình 2)
++ GRANDPA là cơ chế cuối cùng cho Chuỗi chuyển tiếp Polkadot. Nó hoạt động miễn là 2/3 số nút hoạt động chính xác và có thể hoạt động với 1/5 số nút Byzantine không đồng bộ (có nghĩa là GRANDPA hoạt động chính xác ngay cả khi 1/5 số nút không đồng bộ). Khi hơn 2/3 trình xác nhận chứng thực chuỗi chứa một khối cụ thể, tất cả các khối tương ứng dẫn đến khối đó sẽ được hoàn thiện đồng thời. GRANDPA đạt được thỏa thuận về chuỗi thay vì các khối cụ thể, hợp lý hóa đáng kể quy trình hoàn thiện giao dịch. Trong điều kiện mạng tối ưu, việc hoàn thành gần như ngay lập tức. Trong điều kiện mạng kém, GRANDPA có thể hoàn thiện về mặt lý thuyết hàng triệu khối đồng thời khi các vấn đề được giải quyết.
 -> Có thể nói Polkadot dùng BABE và GRANPA để tạo ra một dạng Hybrid Consensus nhằm tối ưu hóa việc block creation và chain finalization.
 
 ## BABE
