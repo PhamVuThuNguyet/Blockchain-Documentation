@@ -328,7 +328,7 @@ Cách hoạt động của thuật toán Phragmms:
 
 ### Computing a balanced solution
 
-Phần này hướng đến việc thiết kế một thuật toán tối ưu để assign nominators' stake tới các validators. Có 2 hướng để giải quyết bài toán balancing là <i>parametric flow algorithms</i> và <i>star balancing heuristic</i>. Chúng ta sẽ xem xét cả 2 và so sánh chúng.
+Phần này hướng đến việc thiết kế một thuật toán tối ưu để assign nominators' stake tới các validators. Có 2 hướng để giải quyết bài toán balancing là <i>parametric flow algorithms</i> và <i>star balancing heuristic</i>.
 
 #### Notation
 
@@ -342,14 +342,22 @@ Một edge weight vector hợp lý $w \in R_{\geq 0}^N$ phải có tất cả c�
 
 > Note: An inequality is tight if there is some choice of the variables involved for which equality holds. Otherwise it is not.
 
-> Note: Nếu G là đồ thị vô hướng không có khuyên (cạnh nối một đỉnh với chính nó), ma trận liên thuộc (hay liên kết đỉnh cạnh) của đồ thị G, ký hiệu A(G), là ma trận n\*m (n: số đỉnh, m: số cạnh) được định nghĩa là A = ($A_{ij}$) với quy ước:
-
-    * $A_{ij}$ = 1 nếu đỉnh i kề với cạnh j.
-    * $A_{ij}$ = 0 nếu ngược lại.
+> Note: Nếu G là đồ thị vô hướng không có khuyên (cạnh nối một đỉnh với chính nó), ma trận liên thuộc (hay liên kết đỉnh cạnh) của đồ thị G, ký hiệu A(G), là ma trận n\*m (n: số đỉnh, m: số cạnh) được định nghĩa là A = ($A_{ij}$) với quy ước:  $A_{ij}$ = 1 nếu đỉnh i kề với cạnh j, $A_{ij}$ = 0 nếu ngược lại.
 
 Gọi $B \in {0, 1}^{A \times E}$ là ma trận liên thuộc cho validator set $A$. Với bất kỳ $w \in R_{\geq 0}^E$, tổng support mà $w$ assign cho mỗi validator được thể hiện bằng vector $supp_w(v) = (Bw)_v = \sum_{n \in N: nv \in E}{w_{nv}}$.
 
 Nhiệm vụ cần giải quyết trong bài toán balancing là tìm một tight vector $w$ để tối thiểu hóa $l_2$ norm của support vector, hay nói cách khác, cần tối thiểu giá trị: $$val(w) \coloneqq \Vert supp_w \Vert_2 = \Vert Bw \Vert_2$$
+
+#### The star balancing heuristic
+Star balancing là một thuật toán tổ hợp ngẫu nhiên.
+
+>Theorem: Với bất kỳ hằng số $\epsilon, \delta > 0$, thuật toán star balancing trả về một tight weight vector $w$ với giá trị $val(w)$ có xác suất ít nhất $(1- \delta)$ 
+
+Chi tiết thuật toán:
+
+Xét $(N \cup A, E, s)$. Với mỗi nominator $n \in N$, gọi $A_n \subseteq A$ là set các neighbors của nó trong $A$.
+
+
 
 ## Hybrid consensus
 
