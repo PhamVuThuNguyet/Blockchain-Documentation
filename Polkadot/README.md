@@ -396,9 +396,7 @@ Xem thêm tại <a href = "https://www.youtube.com/watch?v=1CuTSluL7v4&t=4s">đ�
 
 BABE là một thuật toán dựa trên slot.
 
-BABE được thiết kế để tạo ra các khối trên mạng Polkadot. Nó đạt được điều này bằng cách hoạt động giữa các nút xác thực để xác định việc tạo khối mới. BABE phân bổ các block production slot cho validator dựa trên số lượng DOT mà họ đã đặt cược, sử dụng chu kỳ ngẫu nhiên tương tự như thuật toán đồng thuận Ouroboros Praos.
-
-BABE (Blind Assignment for Blockchain Extension protocol) là một cơ chế block production chạy giữa các validators và xác định author của block mới. BABE assigns block production slots cho các validators dựa theo cơ chế randomness cycle.
+BABE (Blind Assignment for Blockchain Extension protocol) là một cơ chế block production chạy giữa các validators và xác định author của block mới. ABE phân bổ các block production slot cho validator dựa trên số lượng DOT mà họ đã đặt cược, sử dụng randomness cycle tương tự như thuật toán đồng thuận Ouroboros Praos. Nói tóm gọn, mỗi block producers sẽ có VRF key được regist với số lượng locked token của họ.
 
 ### Randomness
 
@@ -416,10 +414,21 @@ Chi tiết cách hoạt động:
 - Mỗi slot có thể chứa 1 block hoặc không
 - 2400 slots tạo thành epoch -> 1 epoch kéo dài 4hrs.
 - Trong 1 slot, mỗi validator sẽ "roll" bằng cách thực hiện một function (VRF) với input:
+
   - "Secret key": Key được generate riêng cho roll này
   - Epoch randomness value: hash của VRF value từ block trong epoch gần cuối (N - 2), vì vậy tính ngẫu nhiên trong quá khứ sẽ ảnh hưởng đến tính ngẫu nhiên ở hiện tại (N).
-  - Slot number  
-Output gồm 2 value: RESULT (random value) và PROOF (bằng chứng cho thấy RESULT được generate đúng). 
+  - Slot number
+
+- Output gồm 2 value: RESULT (random value) và PROOF (bằng chứng cho thấy RESULT được generate đúng).
+- RESULT được so sánh với một _threshold_, nếu RESULT < threshold thì validator đã roll value trở thành candidate để produce block cho slot đó. Validator sau đó sẽ cố gắng tạo block mới và submit block đó lên network cùng với RESULT và PROOF đã thu được.
+- Trong VRF, mỗi validator sẽ roll 1 số, check với threshold và produce block nếu result < threshold.
+
+### Cách hoạt động của BABE
+
+Trong BABE, chúng ta có chuỗi các epochs tuần tự không chồng nhau $(e1, e2,...)$, mỗi epoch chứa $t$ block production slots tuần tự $(e_i=\{sl_1^i, sl_2^i,..., sl_t^i\})$. Vào đầu mỗi epoch, chúng ta chọn ngẫu nhiên 1 "slot leader" cho mỗi slot. Slot leader có thể là 1 hoặc nhiều party, cũng có thể không có. Việc lựa chọn này hoàn toàn bí mật, chỉ chính slot leader được chọn mới được biết, nhưng họ sẽ công khai khi claim slot của mình lúc họ produce ra block mới.
+
+Mỗi party $P_j$ có một session key chứa ít nhất hai loại public/private key pair:
+- Một ver
 
 ## GRANDPA
 
