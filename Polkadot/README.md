@@ -342,22 +342,21 @@ Một edge weight vector hợp lý $w \in R_{\geq 0}^N$ phải có tất cả c�
 
 > Note: An inequality is tight if there is some choice of the variables involved for which equality holds. Otherwise it is not.
 
-> Note: Nếu G là đồ thị vô hướng không có khuyên (cạnh nối một đỉnh với chính nó), ma trận liên thuộc (hay liên kết đỉnh cạnh) của đồ thị G, ký hiệu A(G), là ma trận n\*m (n: số đỉnh, m: số cạnh) được định nghĩa là A = ($A_{ij}$) với quy ước:  $A_{ij}$ = 1 nếu đỉnh i kề với cạnh j, $A_{ij}$ = 0 nếu ngược lại.
+> Note: Nếu G là đồ thị vô hướng không có khuyên (cạnh nối một đỉnh với chính nó), ma trận liên thuộc (hay liên kết đỉnh cạnh) của đồ thị G, ký hiệu A(G), là ma trận n\*m (n: số đỉnh, m: số cạnh) được định nghĩa là A = ($A_{ij}$) với quy ước: $A_{ij}$ = 1 nếu đỉnh i kề với cạnh j, $A_{ij}$ = 0 nếu ngược lại.
 
 Gọi $B \in {0, 1}^{A \times E}$ là ma trận liên thuộc cho validator set $A$. Với bất kỳ $w \in R_{\geq 0}^E$, tổng support mà $w$ assign cho mỗi validator được thể hiện bằng vector $supp_w(v) = (Bw)_v = \sum_{n \in N: nv \in E}{w_{nv}}$.
 
 Nhiệm vụ cần giải quyết trong bài toán balancing là tìm một tight vector $w$ để tối thiểu hóa $l_2$ norm của support vector, hay nói cách khác, cần tối thiểu giá trị: $$val(w) \coloneqq \Vert supp_w \Vert_2 = \Vert Bw \Vert_2$$
 
 #### The star balancing heuristic
+
 Star balancing là một thuật toán tổ hợp ngẫu nhiên.
 
->Theorem: Với bất kỳ hằng số $\epsilon, \delta > 0$, thuật toán star balancing trả về một tight weight vector $w$ với giá trị $val(w)$ có xác suất ít nhất $(1- \delta)$ 
+> Theorem: Với bất kỳ hằng số $\epsilon, \delta > 0$, thuật toán star balancing trả về một tight weight vector $w$ với giá trị $val(w)$ có xác suất ít nhất $(1- \delta)$
 
 Chi tiết thuật toán:
 
 Xét $(N \cup A, E, s)$. Với mỗi nominator $n \in N$, gọi $A_n \subseteq A$ là set các neighbors của nó trong $A$.
-
-
 
 ## Hybrid consensus
 
@@ -370,30 +369,57 @@ Sự đồng thuận trong blockchain chủ yếu diễn ra ở hai họat độ
   - PoS, DPoS: Mạng có thể bị tấn công nếu nhiều validator cố tình làm sai, hoặc validator bị điều khiển.
 - Chain finalization:
   - Không có mốc thời gian cụ thể là khi nào chain sẽ được xác nhận cuối cùng (finalization)
-  - Về lý thuyết blockchain ledger có thể bị sửa đổi sau nhiều năm, nhiều chục năm.
+  - Về lý thuyết blockchain ledger có thể bị sửa đổi sau nhiều năm
 
 2. Polkadot đã làm gì để khác biệt ?
    Ý tưởng của họ là tách 2 quá trình block creation và chain finalization
 
-- block creation (hay block authoriation) sử dụng BABE (Blind Assigment for Blockchain Extention)
+- Block creation (hay block authoriation) sử dụng BABE (Blind Assigment for Blockchain Extention)
 
-* BABE là một thuật toán dựa trên slot, dùng bằng chứng cổ phần (PoS)
-* BABE được thiết kế để tạo ra các khối trên mạng Polkadot. Nó đạt được điều này bằng cách hoạt động giữa các nút xác thực để xác định việc tạo khối mới. BABE phân bổ các vị trí sản xuất khối cho trình xác thực dựa trên số lượng DOT mà họ đã đặt cược, sử dụng chu kỳ ngẫu nhiên tương tự như thuật toán đồng thuận Ouroboros Praos .
-* Để tạo ra một block cần một khoảng thời gian, khoảng thời gian đó gọi là epoch, Polkadot chia thành nhiều epoch, trong mỗi epoch lại chia làm nhiều slot, một slot khoảng 6s, cứ 6 giây này có 1 block được tạo ra.
-* Đầu mỗi epoch tập hợp các validators được lựa chọn, các validator đó sẽ làm việc trong suốt epoch tiếp theo. Tương tự, vào đầu slot cũng có những validator được lựa chọn để làm việc trong slot tiếp.
+  - Để tạo ra một block cần một khoảng thời gian, khoảng thời gian đó gọi là epoch, Polkadot chia thành nhiều epoch, trong mỗi epoch lại chia làm nhiều slot, một slot khoảng 6s, cứ 6 giây này có 1 block được tạo ra.
+  - Đầu mỗi epoch tập hợp các validators được lựa chọn, các validator đó sẽ làm việc trong suốt epoch tiếp theo. Tương tự, vào đầu slot cũng có những validator được lựa chọn để làm việc trong slot tiếp.
 
-Làm như nào để chọn được validator làm việc trong 1 slot nhất định ?
+  Làm như nào để chọn được validator làm việc trong 1 slot nhất định ?
 
-- Phương pháp đơn gian nhất là round-robin: kiểu chọn xoay vòng, lần này người này làm thì lần sau đến người tiếp theo. Tuy nhiên, nhược điểm là coordinate attack vì validator làm việc trong slot tiếp theo sẽ được biết trước.
-- Sau đó họ khắc phục bằng phường pháp Blind Assignment thông qua lựa chọn ngẫu nhiên.
+  - Phương pháp đơn gian nhất là round-robin: kiểu chọn xoay vòng, lần này người này làm thì lần sau đến người tiếp theo. Tuy nhiên, nhược điểm là coordinate attack vì validator làm việc trong slot tiếp theo sẽ được biết trước.
+  - Sau đó họ khắc phục bằng phường pháp Blind Assignment thông qua lựa chọn ngẫu nhiên.
 
 * Chain finalization sử dụng GRANPA
 
-- Các validator sẽ vote ở chain, không phải ở block (với PoW, PoS các validator vote cho từng block, sau đó broadcast kết quả cho các node toàn mạng). Khi vote cho chain thì các block trong chain đó mặc định được vote luôn.
-- GRANDPA là cơ chế cuối cùng cho Chuỗi chuyển tiếp Polkadot. Nó hoạt động miễn là 2/3 số nút hoạt động chính xác và có thể hoạt động với 1/5 số nút Byzantine không đồng bộ (có nghĩa là GRANDPA hoạt động chính xác ngay cả khi 1/5 số nút không đồng bộ). Khi hơn 2/3 trình xác nhận chứng thực chuỗi chứa một khối cụ thể, tất cả các khối tương ứng dẫn đến khối đó sẽ được hoàn thiện đồng thời. GRANDPA đạt được thỏa thuận về chuỗi thay vì các khối cụ thể, hợp lý hóa đáng kể quy trình hoàn thiện giao dịch. Trong điều kiện mạng tối ưu, việc hoàn thành gần như ngay lập tức. Trong điều kiện mạng kém, GRANDPA có thể hoàn thiện về mặt lý thuyết hàng triệu khối đồng thời khi các vấn đề được giải quyết.
-  -> Có thể nói Polkadot dùng BABE và GRANPA để tạo ra một dạng Hybrid Consensus nhằm tối ưu hóa việc block creation và chain finalization.
+  - Các validator sẽ vote ở chain, không phải ở block (với PoW, PoS các validator vote cho từng block, sau đó broadcast kết quả cho các node toàn mạng). Khi vote cho chain thì các block trong chain đó mặc định được vote luôn.
+  - GRANDPA là cơ chế cuối cùng cho Chuỗi chuyển tiếp Polkadot. Nó hoạt động miễn là 2/3 số nút hoạt động chính xác và có thể hoạt động với 1/5 số nút Byzantine không đồng bộ (có nghĩa là GRANDPA hoạt động chính xác ngay cả khi 1/5 số nút không đồng bộ). Khi hơn 2/3 trình xác nhận chứng thực chuỗi chứa một khối cụ thể, tất cả các khối tương ứng dẫn đến khối đó sẽ được hoàn thiện đồng thời. GRANDPA đạt được thỏa thuận về chuỗi thay vì các khối cụ thể, hợp lý hóa đáng kể quy trình hoàn thiện giao dịch. Trong điều kiện mạng tối ưu, việc hoàn thành gần như ngay lập tức. Trong điều kiện mạng kém, GRANDPA có thể hoàn thiện về mặt lý thuyết hàng triệu khối đồng thời khi các vấn đề được giải quyết.
+
+=> Có thể nói Polkadot dùng BABE và GRANPA để tạo ra một dạng Hybrid Consensus nhằm tối ưu hóa việc block creation và chain finalization.
+Xem thêm tại <a href = "https://www.youtube.com/watch?v=1CuTSluL7v4&t=4s">đây</a>
 
 ## BABE
+
+BABE là một thuật toán dựa trên slot.
+
+BABE được thiết kế để tạo ra các khối trên mạng Polkadot. Nó đạt được điều này bằng cách hoạt động giữa các nút xác thực để xác định việc tạo khối mới. BABE phân bổ các block production slot cho validator dựa trên số lượng DOT mà họ đã đặt cược, sử dụng chu kỳ ngẫu nhiên tương tự như thuật toán đồng thuận Ouroboros Praos.
+
+BABE (Blind Assignment for Blockchain Extension protocol) là một cơ chế block production chạy giữa các validators và xác định author của block mới. BABE assigns block production slots cho các validators dựa theo cơ chế randomness cycle.
+
+### Randomness
+
+Tính ngẫu nhiên trong PoS blockchain rất quan trọng vì chúng ta cần phân bố validator responsibilities một cách công bằng và không thể dự đoán trước. Tuy nhiên những hàm sinh số ngẫu nhiên mà chúng ta thường gặp trong lập trình không thực sự là ngẫu nhiên. Nó chỉ là "Pseudo-random", nghĩa là chúng phụ thuộc vào một _seed_ "đủ ngẫu nhiên". Với cùng một seed, chúng ta sẽ luôn thu được cùng một đầu ra. Tuy nhiên trong thực tế, đầu vào của chúng ta thay đổi liên tục khiến cho việc get same result cho tất cả các nodes trong blockchain gần như bất khả thi.
+
+Đối với blockchain, có 2 hướng tiếp cận chính cho bài toán randomness là: RANDAO và VRF. Polkadot và Kusama đều sử dụng VRF.
+
+### VRF
+
+VRF (Verifiable random function) là một phép toán nhận input và generate ra output ngẫu nhiên cùng bằng chứng xác thực submitter.
+
+Chi tiết cách hoạt động:
+
+- Slots có độ dài 6 giây
+- Mỗi slot có thể chứa 1 block hoặc không
+- 2400 slots tạo thành epoch -> 1 epoch kéo dài 4hrs.
+- Trong 1 slot, mỗi validator sẽ "roll" bằng cách thực hiện một function (VRF) với input:
+  - "Secret key": Key được generate riêng cho roll này
+  - Epoch randomness value: hash của VRF value từ block trong epoch gần cuối (N - 2), vì vậy tính ngẫu nhiên trong quá khứ sẽ ảnh hưởng đến tính ngẫu nhiên ở hiện tại (N).
+  - Slot number  
+Output gồm 2 value: RESULT (random value) và PROOF (bằng chứng cho thấy RESULT được generate đúng). 
 
 ## GRANDPA
 
