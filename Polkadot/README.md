@@ -376,18 +376,7 @@ Sự đồng thuận trong blockchain chủ yếu diễn ra ở hai họat độ
 
 - Block creation (hay block authoriation) sử dụng BABE (Blind Assigment for Blockchain Extention)
 
-  - Để tạo ra một block cần một khoảng thời gian, khoảng thời gian đó gọi là epoch, Polkadot chia thành nhiều epoch, trong mỗi epoch lại chia làm nhiều slot, một slot khoảng 6s, cứ 6 giây này có 1 block được tạo ra.
-  - Đầu mỗi epoch tập hợp các validators được lựa chọn, các validator đó sẽ làm việc trong suốt epoch tiếp theo. Tương tự, vào đầu slot cũng có những validator được lựa chọn để làm việc trong slot tiếp.
-
-  Làm như nào để chọn được validator làm việc trong 1 slot nhất định ?
-
-  - Phương pháp đơn gian nhất là round-robin: kiểu chọn xoay vòng, lần này người này làm thì lần sau đến người tiếp theo. Tuy nhiên, nhược điểm là coordinate attack vì validator làm việc trong slot tiếp theo sẽ được biết trước.
-  - Sau đó họ khắc phục bằng phường pháp Blind Assignment thông qua lựa chọn ngẫu nhiên.
-
 * Chain finalization sử dụng GRANPA
-
-  - Các validator sẽ vote ở chain, không phải ở block (với PoW, PoS các validator vote cho từng block, sau đó broadcast kết quả cho các node toàn mạng). Khi vote cho chain thì các block trong chain đó mặc định được vote luôn.
-  - GRANDPA là cơ chế cuối cùng cho Chuỗi chuyển tiếp Polkadot. Nó hoạt động miễn là 2/3 số nút hoạt động chính xác và có thể hoạt động với 1/5 số nút Byzantine không đồng bộ (có nghĩa là GRANDPA hoạt động chính xác ngay cả khi 1/5 số nút không đồng bộ). Khi hơn 2/3 trình xác nhận chứng thực chuỗi chứa một khối cụ thể, tất cả các khối tương ứng dẫn đến khối đó sẽ được hoàn thiện đồng thời. GRANDPA đạt được thỏa thuận về chuỗi thay vì các khối cụ thể, hợp lý hóa đáng kể quy trình hoàn thiện giao dịch. Trong điều kiện mạng tối ưu, việc hoàn thành gần như ngay lập tức. Trong điều kiện mạng kém, GRANDPA có thể hoàn thiện về mặt lý thuyết hàng triệu khối đồng thời khi các vấn đề được giải quyết.
 
 => Có thể nói Polkadot dùng BABE và GRANPA để tạo ra một dạng Hybrid Consensus nhằm tối ưu hóa việc block creation và chain finalization.
 Xem thêm tại <a href = "https://www.youtube.com/watch?v=1CuTSluL7v4&t=4s">đây</a>
@@ -396,7 +385,15 @@ Xem thêm tại <a href = "https://www.youtube.com/watch?v=1CuTSluL7v4&t=4s">đ�
 
 BABE là một thuật toán dựa trên slot.
 
-BABE (Blind Assignment for Blockchain Extension protocol) là một cơ chế block production chạy giữa các validators và xác định author của block mới. ABE phân bổ các block production slot cho validator dựa trên số lượng DOT mà họ đã đặt cược, sử dụng randomness cycle tương tự như thuật toán đồng thuận Ouroboros Praos. Nói tóm gọn, mỗi block producers sẽ có VRF key được regist với số lượng locked token của họ.
+- Để tạo ra một block cần một khoảng thời gian, khoảng thời gian đó gọi là epoch, Polkadot chia thành nhiều epoch, trong mỗi epoch lại chia làm nhiều slot, một slot khoảng 6s, cứ 6 giây này có 1 block được tạo ra.
+- Đầu mỗi epoch tập hợp các validators được lựa chọn, các validator đó sẽ làm việc trong suốt epoch tiếp theo. Tương tự, vào đầu slot cũng có những validator được lựa chọn để làm việc trong slot tiếp.
+
+Làm như nào để chọn được validator làm việc trong 1 slot nhất định ?
+
+- Phương pháp đơn gian nhất là round-robin: kiểu chọn xoay vòng, lần này người này làm thì lần sau đến người tiếp theo. Tuy nhiên, nhược điểm là coordinate attack vì validator làm việc trong slot tiếp theo sẽ được biết trước.
+- Sau đó họ khắc phục bằng phương pháp Blind Assignment thông qua lựa chọn ngẫu nhiên.
+
+BABE (Blind Assignment for Blockchain Extension protocol) là một cơ chế block production chạy giữa các validators và xác định author của block mới. BABE phân bổ các block production slot cho validator dựa trên số lượng DOT mà họ đã đặt cược, sử dụng randomness cycle tương tự như thuật toán đồng thuận Ouroboros Praos. Nói tóm gọn, mỗi block producers sẽ có VRF key được regist với số lượng locked token của họ.
 
 ### Randomness
 
@@ -428,9 +425,75 @@ Chi tiết cách hoạt động:
 Trong BABE, chúng ta có chuỗi các epochs tuần tự không chồng nhau $(e1, e2,...)$, mỗi epoch chứa $t$ block production slots tuần tự $(e_i=\{sl_1^i, sl_2^i,..., sl_t^i\})$. Vào đầu mỗi epoch, chúng ta chọn ngẫu nhiên 1 "slot leader" cho mỗi slot. Slot leader có thể là 1 hoặc nhiều party, cũng có thể không có. Việc lựa chọn này hoàn toàn bí mật, chỉ chính slot leader được chọn mới được biết, nhưng họ sẽ công khai khi claim slot của mình lúc họ produce ra block mới.
 
 Mỗi party $P_j$ có một session key chứa ít nhất hai loại public/private key pair:
-- Một ver
+
+- VRF key $(sk_j^v, pk_j^v)$
+- Blocks signing key $(sk_j^s, pk_j^s)$
+
+Mỗi party $P_j$ giữ 1 bản sao local của set các blockchains $C_j=\{C_1, C_2,...C_l\}$.
+
+Trong BABE, tất cả validators có cơ hội trở thành block producer như nhau. Xác suất để 1 validator được chọn trong 1 slot là:
+$$p=\phi c(\theta)=1-(1-c)^{1/n}$$
+
+Trong đó $0 \leq c \leq 1$ là hằng số, n là số lượng validators.
+
+Threshold để so sánh được tính bằng công thức:
+$$r=2^{l_{vrf}}\phi c(\theta)$$
+
+Trong đó $l_{vrf}$ là độ dài của randomness value.
+
+BABE hoạt động với 3 phases:
+
+1. Genesis Phase
+
+   Trong phase này, chúng ta khởi tạo genesis block (unique). Genesis block chứa 1 số ngẫu nhiên $r_1$ sử dụng để chọn slot leader trong 2 epochs đầu.
+
+   Session public keys của các validators là $(pk_1^v,pk_2^v,...pk_n^v), (pk_1^s, pk_2^s,..., pk_n^s)$
+
+2. Normal Phase
+
+   Giả sử validator $V_j$ có set chains $C_j$ tại slot $sl_k$ trong epoch $e_m$, best chain $C$ được chọn trong slot $sl_{k-1}$, độ dài của $C$ là $l-1$.
+
+   $V_j$ produce 1 block nếu người đó là slot leader của $sl_k$, hay nếu $(d) < threshold$, với $(d)$ là first output của VRF:
+   $$VRF_{sk_j^v}(r_m||sl_k) \rightarrow (d, \pi)$$
+
+   Block $B_l$ chứa slot number $sl_k$, hash của block trước đó $H_{l-1}$, VRF output $(d, \pi)$, transactions $tx$, signature $\sigma=Sign_{sk_j^s}(sl_k||H_{l-1}||d||\pi||tx)$
+
+   Khi nhận được block mới $B=(sl, H, d', \pi', tx', \sigma')$, các validator tiến hành validate nó:
+
+   - $Verify_{pk_j^s}(\sigma') \rightarrow valid$ (signature verification)
+   - $Verify_{pk_j^v}(\pi', r_m||sl) \rightarrow valid$ và $d' < r$ (VRF's verification algorithm)
+   - Tồn tại chain C' với header H
+   - Tất cả các transactions trong B đều valid
+
+   Vào cuối slot, $P_j$ chọn ra best chain của slot này thông qua chain selection rule.
+
+3. Epoch Update Phase
+
+   Trước khi bắt đầu epoch mới $e_m$, validators sẽ nhận được epoch randomness và active validators set mới.
+
+   Validator set cho epoch $e_m$ phải được thêm vào relay chain trễ nhất vào cuối epoch $e_{m-3}$. Vì vậy, 1 validator có thể tham gia produce block sớm nhất sau 2 epochs sau khi họ được join vào relay chain.
+
+   Randomness cho epoch $e_m$ được tính bằng:
+   $$r_m=H(r_{m-2}||m||p)$$
+
+   Trong đó $p$ là concat của tất cả VRF output của các blocks được produce trong epoch $e_{m-2}$.
+
+   Đây là lý do validator chỉ có thể tham gia produce block sớm nhất sau 2 epochs, đó là để đảm bảo VRF keys của validators phải được thêm vào chain hết trước khi randomness được generate.
 
 ## GRANDPA
+
+GRANDPA (GHOST-based Recursive Ancestor Deriving Prefix Agreement Protocol) là cơ chế finality trong Polkadot, sử dụng để quyết định final block được thêm vào blockchain là block nào, final changes là ở đâu.
+
+- Khác với BFT (Byzantine fault-tolerant algorithms), trong GRANDPA, các validator sẽ vote ở chain, không phải ở block (với PoW, PoS các validator vote cho từng block, sau đó broadcast kết quả cho các node toàn mạng). Khi vote cho chain thì các blocks trong chain đó mặc định được vote luôn. GRANDPA sẽ tìm ra highest block number với maximum votes và chọn đó là final block.
+
+- Do sự tách biệt giữa 2 quá trình, GRANDPA có thể finalize nhiều blocks cùng 1 lúc.
+
+Cách hoạt động của GRANDPA:
+
+- Mỗi node / party vote cho highest block mà họ cho là valid từ round trước
+- Mỗi validator sau đó submit 1 "pre-vote" cho block đó. Nếu nó có hơn 2/3 votes trong network, proof of finality được tạo ra.
+- Dựa trên các "pre-votes" này, mỗi validator tính toán highest block có thể finalized. Nếu chain mới dài hơn chain trước đó, validator broadcasts "pre-commit" tới chain.
+- Khi tất cả validator nhận được "pre-commits" cần thiết, họ submit "commit message" cho block được chọn tới chain.
 
 # Accounts
 
