@@ -490,7 +490,7 @@ GRANDPA (GHOST-based Recursive Ancestor Deriving Prefix Agreement Protocol) là 
 
 Cách hoạt động của GRANDPA:
 
-- Mỗi node / party vote cho highest block mà họ cho là valid từ round trước
+- Mỗi node / party vote cho highest block (head of best chain) mà họ cho là valid từ round trước
 - Mỗi validator sau đó submit 1 "pre-vote" cho block đó. Nếu nó có hơn 2/3 votes trong network, proof of finality được tạo ra.
 - Dựa trên các "pre-votes" này, mỗi validator tính toán highest block có thể finalized. Nếu chain mới dài hơn chain trước đó, validator broadcasts "pre-commit" tới chain.
 - Khi tất cả validator nhận được "pre-commits" cần thiết, họ submit "commit message" cho block được chọn tới chain.
