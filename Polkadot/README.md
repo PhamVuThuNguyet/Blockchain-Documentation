@@ -678,3 +678,59 @@ Key trong Polkadot được chia làm 3 loại
 - Account Keys
 - "Controller" & "Stash" Keys
 - Session Keys
+
+# Architecture
+
+## Bridges
+
+Brigdes được tạo ra để giúp Polkadot tương thích với các blockchain khác (e.g., Bitcoin, Ethereum, etc.)
+
+Có 3 cách để xây dựng bridge:
+
+- Bridge pallets: Xây dựng bridge giữa Polkadot và 1 Substrate-based chain khác (e.g., Kusama <-> Polkadot)
+- Smart contracts: Xây dựng bridge giữa Polkadot và 1 non-Substrate chain (smart contracts cần được cài đặt bên phía non-Substrate chain, e.g. Ethereum mainnet có bridge smart contract cho phép thực thi Eth transactions dựa trên incoming XCMP messages)
+- Higher-order protocols: Nếu non-Substrate chain không hỗ trợ smart contract (e.g., Bitcoin), cần sử dụng các protocols khác (e.g., XClaim)
+
+## Cross-Consensus Message Format (XCM)
+
+XCM là một là định dạng message “đồng thuận chéo” cho phép giao tiếp và chuyển giao tài sản kỹ thuật số giữa các parachains. XCM không dành riêng cho Polkadot, vì nó hướng đến mục tiêu trở thành một ngôn ngữ chung và có thể mở rộng giữa các hệ thống đồng thuận khác nhau.
+
+*Lưu ý: XCM là định dạng message, không phải giao thức truyền tin.
+
+![XCM Tech Stack](../imgs/cross-consensus-tech-stack-e9c1b2ab8b6f6f3f9a78b3a412af0698.png)
+
+Polkadot triển khai hai Cross-Consensus Protocol:
+
+- XCMP (Cross-chain Message Passing): cho phép các parachain trao đổi thông tin với nhau
+
+  - Direct: message truyền trực tiếp giữa các parachain (O(1))
+  - Relayed: message truyền thông qua relay-chain
+
+- VMP (Vertical Message Passing): cho phép các parachain trao đổi message với relay chain.
+
+  - UMP (upward message passing) cho phép các parachain gửi thông tin đến relay chain
+  - DMP (downward message passing) cho phép relay chain truyền thông tin xuống một trong các parachains
+
+- HRMP (Horizontal Relay-routed Message Passing - XCMP Lite): giao diện tương tự như XCMP, nhưng thông tin được lưu trữ trên relay chain
+
+![Cross-Consensus](../imgs/overview-1-2048x1126.png)
+
+### Đăng ký kênh
+
+Trước khi hai chain có thể bắt đầu tương tác với nhau, một kênh thông tin phải được mở. Các kênh là một chiều, có nghĩa là một kênh từ chain A đến chain B sẽ chỉ chuyển thông tin từ A đến B. Do đó, chỉ có thể chuyển tài sản từ tin A đến B. Do đó, phải mở hai kênh để gửi thông tin (hoặc chuyển assets) qua lại.
+
+Một kênh cho XCM giữa relay chain và parachain được tự động mở khi kết nối được thiết lập. Tuy nhiên, khi parachain A muốn mở một kênh liên lạc với parachain B, parachain A phải gửi một channel extrinsic trong mạng của nó. Extrinsic này cũng là một XCM. Bên nhận XCM này là relay chain và extrinsic sẽ bao gồm thông tin như:
+
+- Địa điểm đích – nơi thông tin sẽ được triển khai (trong trường hợp này là relay chain)
+- Tài khoản sẽ trả phí (thanh toán bằng token relay chain)
+- Phí mà giao dịch có thể tiêu tốn khi thực hiện
+- Dữ liệu yêu cầu được mã hóa, thu được bằng cách thực hiện tương tự như trên relay chain. Điều này bao gồm thông tin được mã hóa sau:
+  - Phương thức được yêu cầu trong relay chain (open channel)
+  - Parachain ID của chain đích (parachain B trong ví dụ này)
+  - Số lượng thông tin tối đa trong hàng đợi đích
+  - Kích thước tối đa của thông tin sẽ được gửi
+  - Phí giao dịch được thanh toán bằng phiên bản đại diện cross-chain (xc) của tài sản relay chain (xcRelayChainAsset). Ví dụ: đối với Kusama / Moonriver, phí giao dịch sẽ được thanh toán bằng xcKSM. Do đó, tài khoản thanh toán phí phải có đủ xcRelayChainAsset.
+
+Sau đó, parachain B cũng phải gửi một extrinsic (cũng là một XCM) vào relay chain.
+
+Extrinsic kênh chấp nhận tương tự như đăng ký kênh trước đó. Tuy nhiên, dữ liệu yêu cầu được mã hóa chỉ bao gồm phương thức mới (kênh chấp nhận) và ID parachain của bên gửi (parachain A trong ví dụ này). Sau khi cả hai bên đều đồng ý, kênh sẽ được mở trong lần thay đổi era tiếp theo.
