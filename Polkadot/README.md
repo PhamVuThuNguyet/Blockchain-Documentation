@@ -695,9 +695,11 @@ Có 3 cách để xây dựng bridge:
 
 XCM là một là định dạng message “đồng thuận chéo” cho phép giao tiếp và chuyển giao tài sản kỹ thuật số giữa các parachains. XCM không dành riêng cho Polkadot, vì nó hướng đến mục tiêu trở thành một ngôn ngữ chung và có thể mở rộng giữa các hệ thống đồng thuận khác nhau.
 
-*Lưu ý: XCM là định dạng message, không phải giao thức truyền tin.
+\*Lưu ý: XCM là định dạng message, không phải giao thức truyền tin.
 
 ![XCM Tech Stack](../imgs/cross-consensus-tech-stack-e9c1b2ab8b6f6f3f9a78b3a412af0698.png)
+
+Core của XCM là XCVM (Cross-Consensus Virtual Machine). Một message trong XCM thực chất là một chương trình chạy trên XCVM. Tham khảo thêm tại <a href = "https://medium.com/polkadot-network/xcm-the-cross-consensus-message-format-3b77b1373392"> đây</a>.
 
 Polkadot triển khai hai Cross-Consensus Protocol:
 
@@ -706,20 +708,23 @@ Polkadot triển khai hai Cross-Consensus Protocol:
   - Direct: message truyền trực tiếp giữa các parachain (O(1))
   - Relayed: message truyền thông qua relay-chain
 
+  Trong XCMP, các cross-chain transactions được sắp xếp giải quyết bằng cơ chế hàng đợi dựa trên Merkle tree. Relay chain validators có nhiệm vụ di chuyển transactions từ output queue của một chain vào input queue của chain đích. Tuy nhiên, chỉ có associated metadata được lưu trữ dưới dạng hash trong relay chain storage.
+
 - VMP (Vertical Message Passing): cho phép các parachain trao đổi message với relay chain.
 
   - UMP (upward message passing) cho phép các parachain gửi thông tin đến relay chain
   - DMP (downward message passing) cho phép relay chain truyền thông tin xuống một trong các parachains
 
-- HRMP (Horizontal Relay-routed Message Passing - XCMP Lite): giao diện tương tự như XCMP, nhưng thông tin được lưu trữ trên relay chain
+- HRMP (Horizontal Relay-routed Message Passing - XCMP Lite): stop-gap protocol, giao diện và chức năng tương tự như XCMP nhưng đòi hỏi nhiều tài nguyên hơn vì thông tin được lưu trữ toàn bộ trên relay chain storage.
 
 ![Cross-Consensus](../imgs/overview-1-2048x1126.png)
 
 ### Đăng ký kênh
 
-Trước khi hai chain có thể bắt đầu tương tác với nhau, một kênh thông tin phải được mở. Các kênh là một chiều, có nghĩa là một kênh từ chain A đến chain B sẽ chỉ chuyển thông tin từ A đến B. Do đó, chỉ có thể chuyển tài sản từ tin A đến B. Do đó, phải mở hai kênh để gửi thông tin (hoặc chuyển assets) qua lại.
+Trước khi hai chain có thể bắt đầu tương tác với nhau, hay nói cách khác, trước khi tạo XCMP queue, một channel giữa 2 parachains đó phải được mở. Các kênh là một chiều, có nghĩa là một kênh từ chain A đến chain B sẽ chỉ chuyển thông tin từ A đến B. Do đó, chỉ có thể chuyển tài sản từ tin A đến B. Do đó, phải mở cả hai kênh để gửi thông tin (hoặc chuyển assets) qua lại.
+Cần một lượng deposit để mở kênh, lượng này sẽ được hoàn lại khi kênh đóng.
 
-Một kênh cho XCM giữa relay chain và parachain được tự động mở khi kết nối được thiết lập. Tuy nhiên, khi parachain A muốn mở một kênh liên lạc với parachain B, parachain A phải gửi một channel extrinsic trong mạng của nó. Extrinsic này cũng là một XCM. Bên nhận XCM này là relay chain và extrinsic sẽ bao gồm thông tin như:
+Channel XCM giữa relay chain và parachain được tự động mở khi kết nối được thiết lập. Tuy nhiên, khi parachain A muốn mở một channel với parachain B, parachain A phải gửi một channel extrinsic trong mạng của nó. Extrinsic này cũng là một XCM. Bên nhận XCM này là relay chain và extrinsic sẽ bao gồm thông tin như:
 
 - Địa điểm đích – nơi thông tin sẽ được triển khai (trong trường hợp này là relay chain)
 - Tài khoản sẽ trả phí (thanh toán bằng token relay chain)
@@ -733,4 +738,3 @@ Một kênh cho XCM giữa relay chain và parachain được tự động mở 
 
 Sau đó, parachain B cũng phải gửi một extrinsic (cũng là một XCM) vào relay chain.
 
-Extrinsic kênh chấp nhận tương tự như đăng ký kênh trước đó. Tuy nhiên, dữ liệu yêu cầu được mã hóa chỉ bao gồm phương thức mới (kênh chấp nhận) và ID parachain của bên gửi (parachain A trong ví dụ này). Sau khi cả hai bên đều đồng ý, kênh sẽ được mở trong lần thay đổi era tiếp theo.
