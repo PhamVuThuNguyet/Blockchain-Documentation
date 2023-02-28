@@ -693,7 +693,7 @@ Có 3 cách để xây dựng bridge:
 
 ## Cross-Consensus Message Format (XCM)
 
-XCM là một là định dạng message “đồng thuận chéo” cho phép giao tiếp và chuyển giao tài sản kỹ thuật số giữa các parachains. XCM không dành riêng cho Polkadot, vì nó hướng đến mục tiêu trở thành một ngôn ngữ chung và có thể mở rộng giữa các hệ thống đồng thuận khác nhau.
+XCM là một là định dạng message “đồng thuận chéo” cho phép giao tiếp và chuyển giao tài sản kỹ thuật số giữa các parachains. XCM không dành riêng cho Polkadot, vì nó hướng đến mục tiêu trở thành một ngôn ngữ chung và có thể mở rộng giữa các hệ thống đồng thuận khác nhau. Tham khảo thêm tại <a href = "https://research.web3.foundation/en/latest/polkadot/XCMP/index.html"> đây</a>.
 
 \*Lưu ý: XCM là định dạng message, không phải giao thức truyền tin.
 
@@ -737,4 +737,3 @@ Channel XCM giữa relay chain và parachain được tự động mở khi kế
   - Phí giao dịch được thanh toán bằng phiên bản đại diện cross-chain (xc) của tài sản relay chain (xcRelayChainAsset). Ví dụ: đối với Kusama / Moonriver, phí giao dịch sẽ được thanh toán bằng xcKSM. Do đó, tài khoản thanh toán phí phải có đủ xcRelayChainAsset.
 
 Sau đó, parachain B cũng phải gửi một extrinsic (cũng là một XCM) vào relay chain.
-
